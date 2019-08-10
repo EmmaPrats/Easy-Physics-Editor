@@ -35,11 +35,14 @@ var eptfg_form_damping = document.getElementById("input-damping");
 var eptfg_form_text = document.getElementById("input-text");
 var eptfg_form_showtext = document.getElementById("input-showtext");
 var eptfg_form_font = document.getElementById("input-font");
+var eptfg_form_fonts = document.getElementById("input-fonts");
 var eptfg_form_size = document.getElementById("input-size");
 var eptfg_form_color = document.getElementById("input-color");
 
 var eptfg_form_textlocationX = document.getElementById("input-textlocationX");
 var eptfg_form_textlocationY = document.getElementById("input-textlocationY");
+
+var eptfg_form_positioningmode = document.getElementById("input-positioningmode");
 
 
 //WEBSITE FUNCTIONALITY
@@ -100,32 +103,34 @@ function myMouseMove (event)
         {
             eptfg_canvas.height = y + offsetBottom;
             eptfg_canvas.width = x + offsetRight;
-             if (eptfg_form_ratio_16_9.checked)
-        {
-            eptfg_canvas.width = eptfg_canvas.height * 16 / 9;
-        }
-        else if (eptfg_form_ratio_4_3.checked)
-        {
-            eptfg_canvas.width = eptfg_canvas.height * 4 / 3;
-        }
-        else if (eptfg_form_ratio_1_1.checked)
-        {
-            eptfg_canvas.width = eptfg_canvas.height;
-        }
-        else if (eptfg_form_ratio_3_4.checked)
-        {
-            eptfg_canvas.width = eptfg_canvas.height * 3 / 4;
-        }
-        else if (eptfg_form_ratio_9_16.checked)
-        {
-            eptfg_canvas.width = eptfg_canvas.height * 9 / 16;
-        }
+            if (eptfg_form_ratio_16_9.checked)
+            {
+                eptfg_canvas.width = eptfg_canvas.height * 16 / 9;
+            }
+            else if (eptfg_form_ratio_4_3.checked)
+            {
+                eptfg_canvas.width = eptfg_canvas.height * 4 / 3;
+            }
+            else if (eptfg_form_ratio_1_1.checked)
+            {
+                eptfg_canvas.width = eptfg_canvas.height;
+            }
+            else if (eptfg_form_ratio_3_4.checked)
+            {
+                eptfg_canvas.width = eptfg_canvas.height * 3 / 4;
+            }
+            else if (eptfg_form_ratio_9_16.checked)
+            {
+                eptfg_canvas.width = eptfg_canvas.height * 9 / 16;
+            }
         }
         //TODO I could call the canvas' parent instead of ID
         //TODO add a flex container parent for the canvas
-        eptfg_canvas.parentElement.style.height = (offset(eptfg_canvas) + y + offsetBottom) + "px";
-        eptfg_canvas_width.value = eptfg_canvas.width;
-        eptfg_canvas_height.value = eptfg_canvas.height;
+        eptfg_flex_container.style.height = (offset(eptfg_canvas) + y + offsetBottom) + "px";
+        //eptfg_canvas_width.value = eptfg_canvas.width;
+        //eptfg_canvas_height.value = eptfg_canvas.height;
+        eptfg_canvas_width.innerHTML = eptfg_canvas.width;
+        eptfg_canvas_height.innerHTML = eptfg_canvas.height;
         
         eptfg_draw();
     }
@@ -153,34 +158,87 @@ function ratiochange (event)
 {
     if (event.target.checked)
     {
+        eptfg_form_ratio_16_9.checked = false;
+        eptfg_form_ratio_16_9.nextSibling.innerHTML = "&#128275;16:9";
+        eptfg_form_ratio_4_3.checked = false;
+        eptfg_form_ratio_4_3.nextSibling.innerHTML = "&#128275;4:3";
+        eptfg_form_ratio_1_1.checked = false;
+        eptfg_form_ratio_1_1.nextSibling.innerHTML = "&#128275;1:1";
+        eptfg_form_ratio_3_4.checked = false;
+        eptfg_form_ratio_3_4.nextSibling.innerHTML = "&#128275;3:4";
+        eptfg_form_ratio_9_16.checked = false;
+        eptfg_form_ratio_9_16.nextSibling.innerHTML = "&#128275;9:16";
+        
         switch (event.target.id)
         {
             case "ratio-16-9":
                 eptfg_canvas.width = eptfg_canvas.height * 16 / 9;
+                eptfg_form_ratio_16_9.nextSibling.innerHTML = "&#128274;16:9";
                 break;
             case "ratio-4-3":
                 eptfg_canvas.width = eptfg_canvas.height * 4 / 3;
+                eptfg_form_ratio_4_3.nextSibling.innerHTML = "&#128274;4:3";
                 break;
             case "ratio-1-1":
                 eptfg_canvas.width = eptfg_canvas.height;
+                eptfg_form_ratio_1_1.nextSibling.innerHTML = "&#128274;1:1";
                 break;
             case "ratio-3-4":
                 eptfg_canvas.width = eptfg_canvas.height * 3 / 4;
+                eptfg_form_ratio_3_4.nextSibling.innerHTML = "&#128274;3:4";
                 break;
             case "ratio-9-16":
                 eptfg_canvas.width = eptfg_canvas.height * 9 / 16;
+                eptfg_form_ratio_9_16.nextSibling.innerHTML = "&#128274;9:16";
                 break;
         }
-        eptfg_canvas_width.value = eptfg_canvas.width;
+        eptfg_canvas_width.innerHTML = eptfg_canvas.width;
         
-        eptfg_form_ratio_16_9.checked = false;
-        eptfg_form_ratio_4_3.checked = false;
-        eptfg_form_ratio_1_1.checked = false;
-        eptfg_form_ratio_3_4.checked = false;
-        eptfg_form_ratio_9_16.checked = false;
         event.target.checked = true;
     }
+    else
+    {
+        switch (event.target.id)
+        {
+            case "ratio-16-9":
+                eptfg_form_ratio_16_9.nextSibling.innerHTML = "&#128275;16:9";
+                break;
+            case "ratio-4-3":
+                eptfg_form_ratio_4_3.nextSibling.innerHTML = "&#128275;4:3";
+                break;
+            case "ratio-1-1":
+                eptfg_form_ratio_1_1.nextSibling.innerHTML = "&#128275;1:1";
+                break;
+            case "ratio-3-4":
+                eptfg_form_ratio_3_4.nextSibling.innerHTML = "&#128275;3:4";
+                break;
+            case "ratio-9-16":
+                eptfg_form_ratio_9_16.nextSibling.innerHTML = "&#128275;9:16";
+                break;
+        }
+    }
 }
+
+eptfg_form_lock_canvas_width.addEventListener ("change", function(e){
+                                               if (e.target.checked)
+                                               {
+                                               e.target.nextSibling.innerHTML = "&#128274;";
+                                               }
+                                               else
+                                               {
+                                               e.target.nextSibling.innerHTML = "&#128275;";
+                                               }
+                                               });
+eptfg_form_lock_canvas_height.addEventListener ("change", function(e){
+                                                if (e.target.checked)
+                                                {
+                                                e.target.nextSibling.innerHTML = "&#128274;";
+                                                }
+                                                else
+                                                {
+                                                e.target.nextSibling.innerHTML = "&#128275;";
+                                                }
+                                                });
 
 eptfg_form_scene_scale.addEventListener ("input", function(e){
                                          eptfg_scenescale = e.target.value;
@@ -224,7 +282,26 @@ eptfg_form_text.addEventListener ("change", function(e){
                                   eptfg_initSprings();
                                   });
 eptfg_form_showtext.addEventListener ("change", function(e){eptfg_SHOWTEXT=e.target.checked;});
-eptfg_form_font.addEventListener ("change", function(e){eptfg_font=e.target.value;eptfg_initSprings();});
+eptfg_form_font.addEventListener ("change", function(e){
+                                  if (e.target.value != "")
+                                  {
+                                  eptfg_font=e.target.value;
+                                  eptfg_initSprings();
+                                  }
+                                  else
+                                  {
+                                  eptfg_font=eptfg_form_fonts.value;
+                                  eptfg_initSprings();
+                                  }
+                                  });
+eptfg_form_fonts.addEventListener ("change", function(e){console.log (eptfg_form_font.value);
+                                   if (eptfg_form_font.value == "")
+                                   {
+                                   eptfg_font=e.target.value;
+                                   eptfg_initSprings();
+                                   }
+                                   }
+                                   );
 eptfg_form_size.addEventListener ("change", function(e){eptfg_size=e.target.value;eptfg_initSprings();});
 eptfg_form_color.addEventListener ("change", function(e){
                                    eptfg_color = e.target.value;
@@ -251,6 +328,101 @@ function letterLocationChange (index, axis, value)
         eptfg_letterlocations[index].y = 1 * value;
     }
     eptfg_initSprings();
+}
+
+eptfg_form_positioningmode.addEventListener ("change", function(e){
+                                             eptfg_POSITIONINGMODE = e.target.checked;
+                                             for (var i=0; i<eptfg_letters.length; i++)
+                                             {
+                                             eptfg_letters[i].location.x = eptfg_springs[i].origin.x;
+                                             eptfg_letters[i].location.y = eptfg_springs[i].origin.y;
+                                             }
+                                             }
+                                            );
+
+eptfg_canvas.addEventListener ("mousedown", canvasMouseDown);
+eptfg_canvas.addEventListener ("mousemove", canvasMouseMove);
+eptfg_canvas.addEventListener ("mouseup", canvasMouseUp);
+
+var FLAG_DRAGGING = false;
+var FLAG_DRAGGING_TEXT = false;
+var letterBeingDragged;
+function canvasMouseDown (event)
+{
+    console.log ("event.clientX = " + event.clientX + "\nevent.clientY = " + event.clientY);
+    
+    var x = event.clientX - offset(eptfg_canvas).left;
+    var y = event.clientY - offset(eptfg_canvas).top;
+    console.log ("event.clientX - offset(eptfg_canvas).left = " + (event.clientX - offset(eptfg_canvas).left) + "\nevent.clientY - offset(eptfg_canvas).top = " + (event.clientY - offset(eptfg_canvas).top));
+    //Ara tenim la posició en el canvas. NO FUNCIONA AMB SCROLL, PERÒ SÍ AMB ZOOM
+    
+    var zoom = eptfg_canvas.width / eptfg_scenescale;
+    var mousePos_world = new Vector ((x - eptfg_canvas.width/2) / zoom, (y - eptfg_canvas.height/2) / zoom);
+    var x_world = (x - eptfg_canvas.width/2) / zoom;
+    var y_world = (y - eptfg_canvas.height/2) / zoom;
+    console.log ("x_world = " + x_world + "\ny_world = " + y_world);
+    //Ara tenim la posició en coordenades del món. NO FUNCIONA AMB SCROLL, PERÒ SÍ AMB ZOOM
+    
+    for (var i=0; i<eptfg_letters.length; i++)
+    {
+        if (Vector.dist (mousePos_world, eptfg_letters[i].location) <= 0.2*eptfg_letters[i].visualrepresentation.size)
+        {
+            FLAG_DRAGGING = true;
+            letterBeingDragged = i;
+            console.log ("Letter being dragged: " + i);
+        }
+    }
+    
+    if (!FLAG_DRAGGING)
+    {
+        if (Vector.dist (mousePos_world, eptfg_textlocation) <= 0.2*eptfg_size)
+        {
+            FLAG_DRAGGING_TEXT = true;
+        }
+    }
+}
+
+function canvasMouseMove (event)
+{
+    if (FLAG_DRAGGING)
+    {
+        var x = event.clientX - offset(eptfg_canvas).left;
+        var y = event.clientY - offset(eptfg_canvas).top;
+        
+        var zoom = eptfg_canvas.width / eptfg_scenescale;
+        
+        eptfg_letters[letterBeingDragged].location.x = (x - eptfg_canvas.width/2) / zoom;
+        eptfg_letters[letterBeingDragged].location.y = (y - eptfg_canvas.height/2) / zoom;
+        
+        eptfg_springs[letterBeingDragged].origin.x = (x - eptfg_canvas.width/2) / zoom;
+        eptfg_springs[letterBeingDragged].origin.y = (y - eptfg_canvas.height/2) / zoom;
+        
+        document.getElementById("letter-" + letterBeingDragged + "-x").value = (x - eptfg_canvas.width/2) / zoom;
+        document.getElementById("letter-" + letterBeingDragged + "-y").value = (y - eptfg_canvas.height/2) / zoom;
+        
+        eptfg_draw();
+    }
+    else if (FLAG_DRAGGING_TEXT)
+    {
+        var x = event.clientX - offset(eptfg_canvas).left;
+        var y = event.clientY - offset(eptfg_canvas).top;
+        
+        var zoom = eptfg_canvas.width / eptfg_scenescale;
+        
+        eptfg_textlocation.x = (x - eptfg_canvas.width/2) / zoom;
+        eptfg_textlocation.y = (y - eptfg_canvas.height/2) / zoom;
+        
+        eptfg_form_textlocationX.value = (x - eptfg_canvas.width/2) / zoom;
+        eptfg_form_textlocationY.value = (y - eptfg_canvas.height/2) / zoom;
+        
+        eptfg_draw();
+    }
+}
+
+function canvasMouseUp (event)
+{
+    FLAG_DRAGGING = false;
+    FLAG_DRAGGING_TEXT = false;
 }
 
 

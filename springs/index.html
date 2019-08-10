@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Springs - Easy Physics Editor</title>
+        <link rel="stylesheet" type="text/css" href="../styles.css?1002"/>
+    </head>
+    <body>
+        <header>
+            <h1>EASY PHYSICS EDITOR</h1>
+            <div id="model-chooser-bar" class="nav-container">
+                <a class="model-item auto activemodel">SPRINGS</a>
+                <a href="../floating/index.html" class="model-item auto">FLOATING</a>
+                <a href="../flocking/index.html" class="model-item auto">FLOCKING</a>
+                <a href="../steering/index.html" class="model-item auto">STEERING</a>
+            </div>
+        </header>
+        <div id="eptfg-flex-container" class="flex-container">
+            <div class="canvas-container">
+                <div class="toolbar">
+                    <input type="checkbox" id="grid" name="grid" checked/><label for="grid">Grid</label>
+                    <input type="checkbox" id="ratio-16-9" name="ratio-16-9"/><label for="ratio-16-9">&#128275;16:9</label>
+                    <input type="checkbox" id="ratio-4-3" name="ratio-4-3"/><label for="ratio-4-3">&#128275;4:3</label>
+                    <input type="checkbox" id="ratio-1-1" name="ratio-1-1"/><label for="ratio-1-1">&#128275;1:1</label>
+                    <input type="checkbox" id="ratio-3-4" name="ratio-3-4"/><label for="ratio-3-4">&#128275;3:4</label>
+                    <input type="checkbox" id="ratio-9-16" name="ratio-9-16"/><label for="ratio-9-16">&#128275;9:16</label>
+                    <input type="checkbox" name="lock-canvas-width" id="lock-canvas-width"/><label for="lock-canvas-width">&#128275;</label><span id="canvas-width">480</span>px x <input type="checkbox" name="lock-canvas-height" id="lock-canvas-height"/><label for="lock-canvas-height">&#128275;</label><span id="canvas-height">360</span>px
+                </div>
+            <canvas width="480" height="360" id="eptfg-canvas"></canvas>
+            </div>
+            <div class="userinput-container">
+                <div class="userinput-block">
+                    <p>EDIT THE SCENE</p>
+                    <div class="userinput-item">
+                        <span class="left">scene width</span><span class="right"><input type="range" min="5" max="30" value="11" step="1" id="scene-scale" oninput="document.getElementById('zoomlabel').value = this.value"/><input type="number" id="zoomlabel" min="5" max="30" value="11" step="1" onchange="document.getElementById('scene-scale').value = this.value"></input></span>
+                    </div>
+                </div>
+                <div class="userinput-block">
+                    <p>EDIT THE SIMULATION</p>
+                    <div class="userinput-item">
+                        <span class="left">mass</span>
+                        <span class="right"><input type="range" min="0.1" max="10" step="0.1" value="1" id="input-mass"/></span>
+                    </div>
+                    <div class="userinput-item">
+                        <span class="left">stiffness</span>
+                        <span class="right"><input type="range" min="10" max="500" step="10" value="150" id="input-stiffness"/></span>
+                    </div>
+                    <div class="userinput-item">
+                        <span class="left">damping</span>
+                        <span class="right"><input type="range" min="0" max="10" step="1" value="3" id="input-damping"/></span>
+                    </div>
+                </div>
+                <div class="userinput-block">
+                    <p>EDIT THE AESTHETICS</p>
+                    <div class="userinput-item">
+                        <span class="left"><input type="text" id="input-text" value="TFG" onchange="refreshLetterPositionInputs()"/></span>
+                        <span class="right"><input type="checkbox" id="input-showtext" checked="checked"/> <label for="input-showtext">show for guidance</label></span>
+                    </div>
+                    <div class="userinput-item">
+                        <span class="left">text position:</span>
+                        <span class="right">x=<input type="number" id="input-textlocationX" value="-1"/><br/>
+                            y=<input type="number" id="input-textlocationY" value="0"/></span>
+                    </div>
+                    <div class="userinput-item">
+                        help: <input type="checkbox" id="input-positioningmode"/> <label for="input-positioningmode">move letters by dragging them</label>
+                    </div>
+                    <div class="userinput-title">
+                        letter positions:
+                    </div>
+                    <div id="letterlocations">
+                        
+                    </div>
+                    <div class="userinput-item">
+                        <span class="left">select font:</span>
+                        <span class="right"><select id="input-fonts">
+                            <option value="Arial" style="font-family: 'Arial';">Arial</option>
+                            <option value="Arial Black" style="font-family: 'Arial Black';">Arial Black</option>
+                            <option value="Comic Sans MS" style="font-family: 'Comic Sans MS';">Comic Sans MS</option>
+                            <option value="Courier" style="font-family: 'Courier';">Courier</option>
+                            <option value="Courier New" style="font-family: 'Courier New';">Courier New</option>
+                            <option value="Georgia" style="font-family: 'Georgia';">Georgia</option>
+                            <option value="Helvetica" style="font-family: 'Helvatica';">Helvetica</option>
+                            <option value="Tahoma" style="font-family: 'Tahoma';">Tahoma</option>
+                            <option value="Times New Roman" style="font-family: 'Times New Roman';">Times New Roman</option>
+                            <option value="Times" style="font-family: 'Times';">Times</option>
+                            <option value="Trebuchet MS" style="font-family: 'Trebuchet MS';">Trebuchet MS</option>
+                            <option value="Verdana" style="font-family: 'Verdana';">Verdana</option>
+                        </select></span>
+                    </div>
+                    <div class="userinput-item">
+                        <span class="left">or enter your own:</span>
+                        <span class="right"><input type="text" id="input-font" placeholder="Arial"/></span>
+                    </div>
+                    <div class="userinput-item">
+                        <span class="left">font size</span>
+                        <span class="right"><input type="range" min="1" max="20" step="1" value="1" id="input-size"/></span>
+                    </div>
+                    <div class="userinput-item">
+                        <span class="left">color:</span>
+                        <span class="right"><input type="color" value="#000000" id="input-color"/></span>
+                    </div>
+                </div>
+                <div class="exporting">
+                    <div class="nav-container">
+                        <div class="auto howtouse">HOW TO USE</div>
+                        <div class="auto downloadbutton"><input type="button" value="DOWNLOAD" id="button-downloadfile"/></div>
+                    </div>
+                    <div class="instructions">
+                        <ol>
+                            <li>Edit the animation.</li>
+                            <li>Download the animation file.</li>
+                            <li>Place the file in your website directory.</li>
+                            <li>Add <code>&lt;canvas id="EasyPhysics"&gt;&lt;/canvas&gt;</code> to your webpage.</li>
+                            <li>Add <code>&lt;script src="EasyPhysicsAnimation.js"&gt;&lt;/script&gt;</code> to your webpage, right before the <code>&lt;/body&gt;</code> tag.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <script>
+                function refreshLetterPositionInputs()
+                {
+                    var letterLocationsNode = document.getElementById("letterlocations");
+                    while (letterLocationsNode.firstChild)
+                    {
+                        letterLocationsNode.removeChild (letterLocationsNode.firstChild);
+                    }
+                    
+                    var text = document.getElementById("input-text").value;
+                    for (var i=0; i<text.length; i++)
+                    {
+                        var input = document.createElement("div");
+                        input.style.margin = 0;
+                        input.style.padding = 0;
+                        input.style.display = "flex";
+                        input.style.borderTop = "2px solid white";
+                        input.innerHTML = '<span class="left">' + text[i] + '</span><span class="right">x=<input type="number" id="letter-' + i + '-x" class="input-letterlocation" value="' + (i-1) + '" onchange="letterLocationChange(' + i + ', \'x\', this.value)"/><br/>y=<input type="number" id="letter-' + i + '-y" class="input-letterlocation" value="0" onchange="letterLocationChange(' + i + ', \'y\', this.value)"/></span>';
+                        letterLocationsNode.appendChild (input);
+                    }
+                }
+            refreshLetterPositionInputs();
+                </script>
+        <script src="../math.js?1002"></script>
+        <script src="../library.js?1002"></script>
+        <script src="springs.js?1002"></script>
+        <script src="springsform-web.js?1002"></script>
+        
+    </body>
+</html>

@@ -127,8 +127,10 @@ function myMouseMove (event)
         //TODO I could call the canvas' parent instead of ID
         //TODO add a flex container parent for the canvas
         eptfg_flex_container.style.height = (offset(eptfg_canvas) + y + offsetBottom) + "px";
-        eptfg_canvas_width.value = eptfg_canvas.width;
-        eptfg_canvas_height.value = eptfg_canvas.height;
+        //eptfg_canvas_width.value = eptfg_canvas.width;
+        //eptfg_canvas_height.value = eptfg_canvas.height;
+        eptfg_canvas_width.innerHTML = eptfg_canvas.width;
+        eptfg_canvas_height.innerHTML = eptfg_canvas.height;
         
         eptfg_draw();
     }
@@ -156,34 +158,87 @@ function ratiochange (event)
 {
     if (event.target.checked)
     {
+        eptfg_form_ratio_16_9.checked = false;
+        eptfg_form_ratio_16_9.nextSibling.innerHTML = "&#128275;16:9";
+        eptfg_form_ratio_4_3.checked = false;
+        eptfg_form_ratio_4_3.nextSibling.innerHTML = "&#128275;4:3";
+        eptfg_form_ratio_1_1.checked = false;
+        eptfg_form_ratio_1_1.nextSibling.innerHTML = "&#128275;1:1";
+        eptfg_form_ratio_3_4.checked = false;
+        eptfg_form_ratio_3_4.nextSibling.innerHTML = "&#128275;3:4";
+        eptfg_form_ratio_9_16.checked = false;
+        eptfg_form_ratio_9_16.nextSibling.innerHTML = "&#128275;9:16";
+        
         switch (event.target.id)
         {
             case "ratio-16-9":
                 eptfg_canvas.width = eptfg_canvas.height * 16 / 9;
+                eptfg_form_ratio_16_9.nextSibling.innerHTML = "&#128274;16:9";
                 break;
             case "ratio-4-3":
                 eptfg_canvas.width = eptfg_canvas.height * 4 / 3;
+                eptfg_form_ratio_4_3.nextSibling.innerHTML = "&#128274;4:3";
                 break;
             case "ratio-1-1":
                 eptfg_canvas.width = eptfg_canvas.height;
+                eptfg_form_ratio_1_1.nextSibling.innerHTML = "&#128274;1:1";
                 break;
             case "ratio-3-4":
                 eptfg_canvas.width = eptfg_canvas.height * 3 / 4;
+                eptfg_form_ratio_3_4.nextSibling.innerHTML = "&#128274;3:4";
                 break;
             case "ratio-9-16":
                 eptfg_canvas.width = eptfg_canvas.height * 9 / 16;
+                eptfg_form_ratio_9_16.nextSibling.innerHTML = "&#128274;9:16";
                 break;
         }
-        eptfg_canvas_width.value = eptfg_canvas.width;
+        eptfg_canvas_width.innerHTML = eptfg_canvas.width;
         
-        eptfg_form_ratio_16_9.checked = false;
-        eptfg_form_ratio_4_3.checked = false;
-        eptfg_form_ratio_1_1.checked = false;
-        eptfg_form_ratio_3_4.checked = false;
-        eptfg_form_ratio_9_16.checked = false;
         event.target.checked = true;
     }
+    else
+    {
+        switch (event.target.id)
+        {
+            case "ratio-16-9":
+                eptfg_form_ratio_16_9.nextSibling.innerHTML = "&#128275;16:9";
+                break;
+            case "ratio-4-3":
+                eptfg_form_ratio_4_3.nextSibling.innerHTML = "&#128275;4:3";
+                break;
+            case "ratio-1-1":
+                eptfg_form_ratio_1_1.nextSibling.innerHTML = "&#128275;1:1";
+                break;
+            case "ratio-3-4":
+                eptfg_form_ratio_3_4.nextSibling.innerHTML = "&#128275;3:4";
+                break;
+            case "ratio-9-16":
+                eptfg_form_ratio_9_16.nextSibling.innerHTML = "&#128275;9:16";
+                break;
+        }
+    }
 }
+
+eptfg_form_lock_canvas_width.addEventListener ("change", function(e){
+                                               if (e.target.checked)
+                                               {
+                                               e.target.nextSibling.innerHTML = "&#128274;";
+                                               }
+                                               else
+                                               {
+                                               e.target.nextSibling.innerHTML = "&#128275;";
+                                               }
+                                               });
+eptfg_form_lock_canvas_height.addEventListener ("change", function(e){
+                                               if (e.target.checked)
+                                               {
+                                               e.target.nextSibling.innerHTML = "&#128274;";
+                                               }
+                                               else
+                                               {
+                                               e.target.nextSibling.innerHTML = "&#128275;";
+                                               }
+                                               });
 
 eptfg_form_scene_scale.addEventListener ("input", function(e){
                                     eptfg_scenescale = e.target.value;
@@ -358,12 +413,12 @@ function setDefaultValues()
     eptfg_form_ratio_3_4.checked = false;
     eptfg_form_ratio_9_16.checked = false;
     eptfg_form_lock_canvas_width.checked = false;
-    eptfg_canvas_width.value = 480;
+    eptfg_canvas_width.innerHTML = 480;
     eptfg_form_lock_canvas_height.checked = false;
-    eptfg_canvas_height.value = 360;
+    eptfg_canvas_height.innerHTML = 360;
     
-    eptfg_form_scene_scale.value = 100;
-    eptfg_form_zoomlabel.value = 100;
+    eptfg_form_scene_scale.value = 400;
+    eptfg_form_zoomlabel.value = 400;
     
     eptfg_form_quantity.value = 200;
     eptfg_form_addboidbyclicking.checked = false;

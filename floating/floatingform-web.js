@@ -40,6 +40,7 @@ var eptfg_form_visualrepresentation_text = document.getElementById("input-visual
 var eptfg_form_visualrepresentation_image = document.getElementById("input-visualrepresentation-image");
 
 var eptfg_form_text = document.getElementById("input-text");
+var eptfg_form_fonts = document.getElementById("input-fonts");
 var eptfg_form_font = document.getElementById("input-font");
 var eptfg_form_image = document.getElementById("input-image");
 var eptfg_form_quantity = document.getElementById("input-quantity");
@@ -133,8 +134,8 @@ function myMouseMove (event)
         //TODO I could call the canvas' parent instead of ID
         //TODO add a flex container parent for the canvas
         eptfg_canvas.parentElement.style.height = (offset(eptfg_canvas) + y + offsetBottom) + "px";
-        eptfg_canvas_width.value = eptfg_canvas.width;
-        eptfg_canvas_height.value = eptfg_canvas.height;
+        eptfg_canvas_width.innerHTML = eptfg_canvas.width;
+        eptfg_canvas_height.innerHTML = eptfg_canvas.height;
         
         eptfg_draw();
         repositionWaterLevelAndFloor();
@@ -163,34 +164,87 @@ function ratiochange (event)
 {
     if (event.target.checked)
     {
+        eptfg_form_ratio_16_9.checked = false;
+        eptfg_form_ratio_16_9.nextSibling.innerHTML = "&#128275;16:9";
+        eptfg_form_ratio_4_3.checked = false;
+        eptfg_form_ratio_4_3.nextSibling.innerHTML = "&#128275;4:3";
+        eptfg_form_ratio_1_1.checked = false;
+        eptfg_form_ratio_1_1.nextSibling.innerHTML = "&#128275;1:1";
+        eptfg_form_ratio_3_4.checked = false;
+        eptfg_form_ratio_3_4.nextSibling.innerHTML = "&#128275;3:4";
+        eptfg_form_ratio_9_16.checked = false;
+        eptfg_form_ratio_9_16.nextSibling.innerHTML = "&#128275;9:16";
+        
         switch (event.target.id)
         {
             case "ratio-16-9":
                 eptfg_canvas.width = eptfg_canvas.height * 16 / 9;
+                eptfg_form_ratio_16_9.nextSibling.innerHTML = "&#128274;16:9";
                 break;
             case "ratio-4-3":
                 eptfg_canvas.width = eptfg_canvas.height * 4 / 3;
+                eptfg_form_ratio_4_3.nextSibling.innerHTML = "&#128274;4:3";
                 break;
             case "ratio-1-1":
                 eptfg_canvas.width = eptfg_canvas.height;
+                eptfg_form_ratio_1_1.nextSibling.innerHTML = "&#128274;1:1";
                 break;
             case "ratio-3-4":
                 eptfg_canvas.width = eptfg_canvas.height * 3 / 4;
+                eptfg_form_ratio_3_4.nextSibling.innerHTML = "&#128274;3:4";
                 break;
             case "ratio-9-16":
                 eptfg_canvas.width = eptfg_canvas.height * 9 / 16;
+                eptfg_form_ratio_9_16.nextSibling.innerHTML = "&#128274;9:16";
                 break;
         }
-        eptfg_canvas_width.value = eptfg_canvas.width;
+        eptfg_canvas_width.innerHTML = eptfg_canvas.width;
         
-        eptfg_form_ratio_16_9.checked = false;
-        eptfg_form_ratio_4_3.checked = false;
-        eptfg_form_ratio_1_1.checked = false;
-        eptfg_form_ratio_3_4.checked = false;
-        eptfg_form_ratio_9_16.checked = false;
         event.target.checked = true;
     }
+    else
+    {
+        switch (event.target.id)
+        {
+            case "ratio-16-9":
+                eptfg_form_ratio_16_9.nextSibling.innerHTML = "&#128275;16:9";
+                break;
+            case "ratio-4-3":
+                eptfg_form_ratio_4_3.nextSibling.innerHTML = "&#128275;4:3";
+                break;
+            case "ratio-1-1":
+                eptfg_form_ratio_1_1.nextSibling.innerHTML = "&#128275;1:1";
+                break;
+            case "ratio-3-4":
+                eptfg_form_ratio_3_4.nextSibling.innerHTML = "&#128275;3:4";
+                break;
+            case "ratio-9-16":
+                eptfg_form_ratio_9_16.nextSibling.innerHTML = "&#128275;9:16";
+                break;
+        }
+    }
 }
+
+eptfg_form_lock_canvas_width.addEventListener ("change", function(e){
+                                               if (e.target.checked)
+                                               {
+                                               e.target.nextSibling.innerHTML = "&#128274;";
+                                               }
+                                               else
+                                               {
+                                               e.target.nextSibling.innerHTML = "&#128275;";
+                                               }
+                                               });
+eptfg_form_lock_canvas_height.addEventListener ("change", function(e){
+                                                if (e.target.checked)
+                                                {
+                                                e.target.nextSibling.innerHTML = "&#128274;";
+                                                }
+                                                else
+                                                {
+                                                e.target.nextSibling.innerHTML = "&#128275;";
+                                                }
+                                                });
 
 eptfg_form_scene_scale.addEventListener ("input", function(e){
                                          eptfg_scenescale = e.target.value;
@@ -314,7 +368,26 @@ function visualrepresentationChange (event)
 }
 
 eptfg_form_text.addEventListener ("change", function(e){eptfg_text=e.target.value;eptfg_initFlotacion();});
-eptfg_form_font.addEventListener ("change", function(e){eptfg_font=e.target.value;eptfg_initFlotacion();});
+eptfg_form_font.addEventListener ("change", function(e){
+                                  if (e.target.value != "")
+                                  {
+                                  eptfg_font=e.target.value;
+                                  eptfg_initFlotacion();
+                                  }
+                                  else
+                                  {
+                                  eptfg_font=eptfg_form_fonts.value;
+                                  eptfg_initFlotacion();
+                                  }
+                                  });
+eptfg_form_fonts.addEventListener ("change", function(e){console.log (eptfg_form_font.value);
+                                   if (eptfg_form_font.value == "")
+                                   {
+                                   eptfg_font=e.target.value;
+                                   eptfg_initFlotacion();
+                                   }
+                                   }
+                                  );
 
 eptfg_form_image.addEventListener ("change", function(event){
                                    var file = event.target.files && event.target.files[0];
