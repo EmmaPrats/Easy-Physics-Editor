@@ -42,8 +42,6 @@ var eptfg_SHOWTEXT;
 var eptfg_text;
 var eptfg_textlocation;
 
-var eptfg_letterlocations;
-
 var eptfg_font;
 var eptfg_size;
 var eptfg_color;
@@ -51,9 +49,29 @@ var eptfg_color;
 var eptfg_springs;
 var eptfg_letters;
 
+var eptfg_POSITIONINGMODE;
+
 var eptfg_mousePos;
 
-eptfg_canvas.addEventListener ("mousemove", function(e){eptfg_mousePos = new Vector (event.offsetX, event.offsetY);});
+var eptfg_letterlocations;
+
+//Returns the absolute XY position of the object.
+//Only works if no scroll. Does work if zoomed in.
+function offset (el)
+{
+    var rect = el.getBoundingClientRect(),
+    scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+    scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
+}
+
+eptfg_canvas.addEventListener ("mousemove", function(e){
+                               //eptfg_mousePos.x = event.offsetX;
+                               //eptfg_mousePos.y = event.offsetY;
+                               eptfg_mousePos.x = event.clientX - offset(eptfg_canvas).left;
+                               eptfg_mousePos.y = event.clientY - offset(eptfg_canvas).top;
+                               }
+                              );
 
 /**
  * Sets values to parameters that control the simulation.
@@ -73,14 +91,17 @@ function initParams()
     eptfg_text = "TFG";
     eptfg_textlocation = new Vector();
     
+    eptfg_letterlocations = [];
+    for (var i=0; i<eptfg_text.length; i++)
+    {
+        eptfg_letterlocations.push (new Vector (i * 0.5, 0));
+    }
+    
     eptfg_font = "Arial";
     eptfg_size = 1;
     eptfg_color = "#000000";
     
-    eptfg_letterlocations = []; //TODO
-    eptfg_letterlocations.push (new Vector (-1, 0));
-    eptfg_letterlocations.push (new Vector (0, 0));
-    eptfg_letterlocations.push (new Vector (1, 0));
+    eptfg_POSITIONINGMODE = false;
     
     if (typeof eptfgSettingsSprings !== "undefined")
     {
@@ -117,7 +138,7 @@ function eptfg_initSprings()
     
     for (var i=0; i<eptfg_text.length; i++)
     {
-        eptfg_letters.push (new Particle (new Character (eptfg_text[i], eptfg_font, eptfg_size, eptfg_color),//TODO
+        eptfg_letters.push (new Particle (new Character (eptfg_text[i], eptfg_font, eptfg_size, eptfg_color),
                                           eptfg_mass,
                                           eptfg_size,
                                           new Vector (eptfg_letterlocations[i].x, eptfg_letterlocations[i].y),
@@ -127,7 +148,6 @@ function eptfg_initSprings()
                             );
         eptfg_letters[i].color = eptfg_color;
         eptfg_letters[i].visualrepresentation.color = eptfg_color;
-        //new Vector (eptfg_letterlocations[i].x, eptfg_letterlocations[i].y)
         
         eptfg_springs.push (new SimpleSpring (new Vector (eptfg_letterlocations[i].x, eptfg_letterlocations[i].y),
                                               eptfg_letters[i],
@@ -180,29 +200,75 @@ function eptfg_draw()
         eptfg_context.restore();
     }
     
-    var mousePos = Vector.sub (eptfg_mousePos, new Vector (eptfg_canvas.width/2, eptfg_canvas.height/2));
-    mousePos.div (zoom);
-    
-    for (var i=0; i<eptfg_springs.length; i++)
+    if (eptfg_POSITIONINGMODE)
     {
-        eptfg_springs[i].applySpringForcesToParticle2();
-    }
-    
-    for (var i=0; i<eptfg_letters.length; i++)
-    {
-        if (Vector.dist (eptfg_letters[i].location, mousePos) < eptfg_size)
+        for (var i=0; i<eptfg_letters.length; i++)
         {
-            var direction = Vector.sub (eptfg_letters[i].location, mousePos);
-            direction.normalize();
-            direction.mult (100 * eptfg_letters[i].radius);
-            eptfg_letters[i].applyForce (direction);
+            eptfg_letters[i].display (eptfg_context);
+            eptfg_context.save();
+            eptfg_context.fillStyle = "#000000";
+            eptfg_context.globalAlpha = 0.7;
+            eptfg_context.beginPath();
+            eptfg_context.arc (eptfg_letters[i].location.x, eptfg_letters[i].location.y, 0.2*eptfg_letters[i].visualrepresentation.size, 0, 2*Math.PI);
+            eptfg_context.closePath();
+            eptfg_context.fill();
+            eptfg_context.restore();
         }
         
-        eptfg_letters[i].update (eptfg_dt);
-        eptfg_letters[i].display (eptfg_context);
+        if (eptfg_SHOWTEXT)
+        {
+            eptfg_context.save();
+            eptfg_context.fillStyle = "#000000";
+            eptfg_context.globalAlpha = 0.7;
+            eptfg_context.beginPath();
+            eptfg_context.arc (eptfg_textlocation.x, eptfg_textlocation.y, 0.2*eptfg_size, 0, 2*Math.PI);
+            eptfg_context.closePath();
+            eptfg_context.fill();
+            eptfg_context.restore();
+        }
+    }
+    else
+    {
+        var mousePos = Vector.sub (eptfg_mousePos, new Vector (eptfg_canvas.width/2, eptfg_canvas.height/2));
+        mousePos.div (zoom);
+        
+        for (var i=0; i<eptfg_springs.length; i++)
+        {
+            eptfg_springs[i].applySpringForcesToParticle2();
+        }
+        
+        for (var i=0; i<eptfg_letters.length; i++)
+        {
+            if (Vector.dist (eptfg_letters[i].location, mousePos) < eptfg_size)
+            {
+                var direction = Vector.sub (eptfg_letters[i].location, mousePos);
+                direction.normalize();
+                direction.mult (100 * eptfg_letters[i].radius);
+                eptfg_letters[i].applyForce (direction);
+            }
+            
+            eptfg_letters[i].update (eptfg_dt);
+            eptfg_letters[i].display (eptfg_context);
+        }
     }
     
     
+    eptfg_context.restore();
+    
+    
+    //canvas corner
+    eptfg_context.save();
+    eptfg_context.globalAlpha = 1;
+    eptfg_context.strokeStyle = "#000000";
+    eptfg_context.lineWidth = 2;
+    eptfg_context.beginPath();
+    eptfg_context.moveTo (eptfg_canvas.width-15, eptfg_canvas.height-3);
+    eptfg_context.lineTo (eptfg_canvas.width-3, eptfg_canvas.height-3);
+    eptfg_context.lineTo (eptfg_canvas.width-3, eptfg_canvas.height-15);
+    eptfg_context.moveTo (eptfg_canvas.width-15, eptfg_canvas.height-8);
+    eptfg_context.lineTo (eptfg_canvas.width-8, eptfg_canvas.height-8);
+    eptfg_context.lineTo (eptfg_canvas.width-8, eptfg_canvas.height-15);
+    eptfg_context.stroke();
     eptfg_context.restore();
 }
 

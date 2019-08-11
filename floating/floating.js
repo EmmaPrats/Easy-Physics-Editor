@@ -22,7 +22,6 @@ var eptfg_context = eptfg_canvas.getContext("2d");
 var eptfg_GRID;
 var eptfg_scenescale;
 var eptfg_waterline;
-var eptfg_floor;
 
 var eptfg_dt; // = 0.01; //Not dependent on user input.
 
@@ -42,7 +41,7 @@ var eptfg_size;
 var eptfg_color;
 
 var eptfg_color_water;
-var eptfg_color_opacity;
+var eptfg_water_opacity;
 
 var eptfg_MUSTUPLOADIMAGE;
 
@@ -51,7 +50,6 @@ function initParams()
     eptfg_GRID = true;
     eptfg_scenescale = 5;
     eptfg_waterline = 0;
-    eptfg_floor = 1.875; //TODO
     
     eptfg_gravity = new Vector (0, 9.81);
     eptfg_mass = 500;
@@ -67,7 +65,7 @@ function initParams()
     eptfg_color = "#000000";
     
     eptfg_color_water = "#0000FF";
-    eptfg_color_opacity = 0.7;
+    eptfg_water_opacity = 0.7;
     
     eptfg_MUSTUPLOADIMAGE = false;
     
@@ -117,11 +115,12 @@ function eptfg_initFlotacion()
                                                  eptfg_font,
                                                  eptfg_mass,
                                                  eptfg_size,
-                                                 new Vector (getRandomBetween(-2, 2), getRandomBetween(-1.5, 1.5)),
+                                                 new Vector (getRandomBetween(-0.8*eptfg_scenescale/2, 0.8*eptfg_scenescale/2), getRandomBetween(-0.8* eptfg_scenescale*eptfg_canvas.height/eptfg_canvas.width/2, 0.8* eptfg_scenescale*eptfg_canvas.height/eptfg_canvas.width/2)),
                                                  new Vector (getRandomBetween(-2, 2), getRandomBetween(-1.5, 1.5)),
                                                  new Vector())
                                 );
             eptfg_letters[i].color = eptfg_color;
+            eptfg_letters[i].angularVelocity = getRandomBetween (-1, 1);
         }
     }
     else if (eptfg_visualrepresentation == "image")
@@ -136,6 +135,7 @@ function eptfg_initFlotacion()
                                                new Vector (getRandomBetween(-2, 2), getRandomBetween(-1.5, 1.5)),
                                                new Vector())
                                );
+            eptfg_images[i].angularVelocity = getRandomBetween (-1, 1);
         }
     }
 }
@@ -197,13 +197,29 @@ function eptfg_draw()
         }
     }
     eptfg_context.save();
-    eptfg_context.globalAlpha = eptfg_color_opacity;
+    eptfg_context.globalAlpha = eptfg_water_opacity;
     
     eptfg_context.lineWidth = 0.025;
     eptfg_context.fillStyle = eptfg_color_water;
-    eptfg_context.fillRect (zoom * (-eptfg_canvas.width/2), eptfg_waterline, zoom * eptfg_canvas.width, eptfg_floor-eptfg_waterline);
+    //eptfg_context.fillRect (zoom * (-eptfg_canvas.width/2), eptfg_waterline, zoom * eptfg_canvas.width, eptfg_floor-eptfg_waterline);
+    eptfg_context.fillRect (zoom * (-eptfg_canvas.width/2), eptfg_waterline, zoom * eptfg_canvas.width, eptfg_scenescale * eptfg_canvas.height / eptfg_canvas.width / 2 - eptfg_waterline);
     eptfg_context.restore();
     
+    eptfg_context.restore();
+    
+    //canvas corner
+    eptfg_context.save();
+    eptfg_context.globalAlpha = 1;
+    eptfg_context.strokeStyle = "#000000";
+    eptfg_context.lineWidth = 2;
+    eptfg_context.beginPath();
+    eptfg_context.moveTo (eptfg_canvas.width-15, eptfg_canvas.height-3);
+    eptfg_context.lineTo (eptfg_canvas.width-3, eptfg_canvas.height-3);
+    eptfg_context.lineTo (eptfg_canvas.width-3, eptfg_canvas.height-15);
+    eptfg_context.moveTo (eptfg_canvas.width-15, eptfg_canvas.height-8);
+    eptfg_context.lineTo (eptfg_canvas.width-8, eptfg_canvas.height-8);
+    eptfg_context.lineTo (eptfg_canvas.width-8, eptfg_canvas.height-15);
+    eptfg_context.stroke();
     eptfg_context.restore();
 }
 
@@ -353,12 +369,6 @@ function drawGrid()
     eptfg_context.moveTo(0.9, -0.1);
     eptfg_context.lineTo(0.9, 0.1);
     eptfg_context.lineWidth = 0.01;
-    eptfg_context.stroke();
-    
-    eptfg_context.lineWidth = 0.025;
-    eptfg_context.beginPath();
-    eptfg_context.moveTo(0, 5);
-    eptfg_context.lineTo(10, 5);
     eptfg_context.stroke();
     
     eptfg_context.restore();

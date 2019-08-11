@@ -51,7 +51,7 @@ var eptfg_color;
 function initParams()
 {
     eptfg_GRID = true;
-    eptfg_scenescale = 100;
+    eptfg_scenescale = 400;
     
     eptfg_radius = 5.0;
     
@@ -140,23 +140,50 @@ function eptfg_animationLoop()
 function eptfg_draw()
 {
     eptfg_context.clearRect (0, 0, eptfg_canvas.width, eptfg_canvas.height);
+    
+    eptfg_context.save();
+    
+    //TODO borrar var scenescale = eptfg_scenescale / 100;
+    var zoom = eptfg_canvas.width / eptfg_scenescale;
+    eptfg_context.setTransform (zoom, 0, 0, zoom, eptfg_canvas.width/2, eptfg_canvas.height/2);
+    
     if (eptfg_GRID)
     {
         drawGrid();
     }
     
-    var scenescale = eptfg_scenescale / 100;
-    var moveX = (eptfg_canvas.width * scenescale - eptfg_canvas.width) / 2;
-    eptfg_context.save();
-    eptfg_context.setTransform (1/scenescale, 0, 0, 1/scenescale, eptfg_canvas.width/2, eptfg_canvas.height/2);
-    eptfg_flock.run (
+    
+    /*eptfg_flock.run (
         eptfg_dt,
         scenescale * (-eptfg_canvas.width/2),
         scenescale * (eptfg_canvas.width/2),
         scenescale * (-eptfg_canvas.height/2),
         scenescale * (eptfg_canvas.height/2)
+    );*/
+    eptfg_flock.run (
+        eptfg_dt,
+        -eptfg_scenescale/2,
+        eptfg_scenescale/2,
+        -eptfg_scenescale * eptfg_canvas.height / eptfg_canvas.width / 2,
+        eptfg_scenescale * eptfg_canvas.height / eptfg_canvas.width / 2
     );
     eptfg_flock.display (eptfg_context);
+    eptfg_context.restore();
+    
+    
+    //canvas corner
+    eptfg_context.save();
+    eptfg_context.globalAlpha = 1;
+    eptfg_context.strokeStyle = "#000000";
+    eptfg_context.lineWidth = 2;
+    eptfg_context.beginPath();
+    eptfg_context.moveTo (eptfg_canvas.width-15, eptfg_canvas.height-3);
+    eptfg_context.lineTo (eptfg_canvas.width-3, eptfg_canvas.height-3);
+    eptfg_context.lineTo (eptfg_canvas.width-3, eptfg_canvas.height-15);
+    eptfg_context.moveTo (eptfg_canvas.width-15, eptfg_canvas.height-8);
+    eptfg_context.lineTo (eptfg_canvas.width-8, eptfg_canvas.height-8);
+    eptfg_context.lineTo (eptfg_canvas.width-8, eptfg_canvas.height-15);
+    eptfg_context.stroke();
     eptfg_context.restore();
 }
 
@@ -169,53 +196,80 @@ eptfg_animationLoop();
  */
 function drawGrid()
 {
-    eptfg_context.lineWidth = 0.5;
-            eptfg_context.save();
-            eptfg_context.setTransform (1, 0, 0, 1, eptfg_canvas.width/2, eptfg_canvas.height/2);
-            
-            eptfg_context.beginPath();
-            eptfg_context.moveTo (-10, 0);
-            eptfg_context.lineTo (10, 0);
-            eptfg_context.stroke();
-            eptfg_context.moveTo (0, -10);
-            eptfg_context.lineTo (0, 10);
-            eptfg_context.stroke();
-            
-            for (var i=-eptfg_canvas.width/2; i<eptfg_canvas.width/2; i+=10)
-            {
-                eptfg_context.beginPath();
-                eptfg_context.moveTo(i, -eptfg_canvas.height/2);
-                eptfg_context.lineTo(i, eptfg_canvas.height/2);
-                eptfg_context.stroke();
-            }
-            
-            eptfg_context.lineWidth = 1;
-            for (var i=-eptfg_canvas.width/2; i<eptfg_canvas.width/2; i+=100)
-            {
-                eptfg_context.beginPath();
-                eptfg_context.moveTo(i, -eptfg_canvas.height/2);
-                eptfg_context.lineTo(i, eptfg_canvas.height/2);
-                eptfg_context.stroke();
-            }
-            
-            eptfg_context.lineWidth = 0.5;
-            
-            for (var i=-eptfg_canvas.height/2; i<eptfg_canvas.height/2; i+=10)
-            {
-                eptfg_context.beginPath();
-                eptfg_context.moveTo(-eptfg_canvas.width/2, i);
-                eptfg_context.lineTo(eptfg_canvas.width/2, i);
-                eptfg_context.stroke();
-            }
-            
-            eptfg_context.lineWidth = 1;
-            for (var i=-eptfg_canvas.height/2; i<eptfg_canvas.height/2; i+=100)
-            {
-                eptfg_context.beginPath();
-                eptfg_context.moveTo(-eptfg_canvas.width/2, i);
-                eptfg_context.lineTo(eptfg_canvas.width/2, i);
-                eptfg_context.stroke();
-            }
+    eptfg_context.save();
+    
+    eptfg_context.lineWidth = 1;
+    eptfg_context.strokeStyle = "#000000";
+    eptfg_context.beginPath();
+    eptfg_context.moveTo (-eptfg_scenescale/2, 0);
+    eptfg_context.lineTo (eptfg_scenescale/2, 0);
+    eptfg_context.stroke();
+    eptfg_context.beginPath();
+    eptfg_context.moveTo (0, -eptfg_scenescale/2);
+    eptfg_context.lineTo (0, eptfg_scenescale/2);
+    eptfg_context.stroke();
+    
+    eptfg_context.strokeStyle = "#444444";
+    eptfg_context.lineWidth = 0.6;
+    for (var i=100; i<eptfg_scenescale/2; i+=100)
+    {
+        eptfg_context.beginPath();
+        eptfg_context.moveTo (i, -eptfg_scenescale/2);
+        eptfg_context.lineTo (i, eptfg_scenescale/2);
+        eptfg_context.stroke();
+    }
+    for (var i=-100; i>-eptfg_scenescale/2; i-=100)
+    {
+        eptfg_context.beginPath();
+        eptfg_context.moveTo (i, -eptfg_scenescale/2);
+        eptfg_context.lineTo (i, eptfg_scenescale/2);
+        eptfg_context.stroke();
+    }
+    for (var i=100; i<eptfg_scenescale/2; i+=100)
+    {
+        eptfg_context.beginPath();
+        eptfg_context.moveTo (-eptfg_scenescale/2, i);
+        eptfg_context.lineTo (eptfg_scenescale/2, i);
+        eptfg_context.stroke();
+    }
+    for (var i=-100; i>-eptfg_scenescale/2; i-=100)
+    {
+        eptfg_context.beginPath();
+        eptfg_context.moveTo (-eptfg_scenescale/2, i);
+        eptfg_context.lineTo (eptfg_scenescale/2, i);
+        eptfg_context.stroke();
+    }
+    
+    eptfg_context.strokeStyle = "#AAAAAA";
+    eptfg_context.lineWidth = 0.05;
+    for (var i=10; i<eptfg_scenescale/2; i+=10)
+    {
+        eptfg_context.beginPath();
+        eptfg_context.moveTo (i, -eptfg_scenescale/2);
+        eptfg_context.lineTo (i, eptfg_scenescale/2);
+        eptfg_context.stroke();
+    }
+    for (var i=-10; i>-eptfg_scenescale/2; i-=10)
+    {
+        eptfg_context.beginPath();
+        eptfg_context.moveTo (i, -eptfg_scenescale/2);
+        eptfg_context.lineTo (i, eptfg_scenescale/2);
+        eptfg_context.stroke();
+    }
+    for (var i=10; i<eptfg_scenescale/2; i+=10)
+    {
+        eptfg_context.beginPath();
+        eptfg_context.moveTo (-eptfg_scenescale/2, i);
+        eptfg_context.lineTo (eptfg_scenescale/2, i);
+        eptfg_context.stroke();
+    }
+    for (var i=-10; i>-eptfg_scenescale/2; i-=10)
+    {
+        eptfg_context.beginPath();
+        eptfg_context.moveTo (-eptfg_scenescale/2, i);
+        eptfg_context.lineTo (eptfg_scenescale/2, i);
+        eptfg_context.stroke();
+    }
     
     eptfg_context.restore();
 }
