@@ -49,6 +49,10 @@ var eptfg_seekweight;
 var eptfg_evadeweight;
 var eptfg_pursueweight;
 
+var eptfg_SHOW_GATHERDISTANCE;
+var eptfg_SHOW_EVADEDISTANCE;
+var eptfg_SHOW_HUNTDISTANCE;
+
 var eptfg_visualrepresentation_hunter;
 var eptfg_visualrepresentation_gatherer;
 var eptfg_visualrepresentation_target;
@@ -83,6 +87,10 @@ function initParams()
     eptfg_seekweight = 1.0;
     eptfg_evadeweight = 1.0;
     eptfg_pursueweight = 1.0;
+    
+    eptfg_SHOW_GATHERDISTANCE = false;
+    eptfg_SHOW_EVADEDISTANCE = false;
+    eptfg_SHOW_HUNTDISTANCE = false;
     
     eptfg_visualrepresentation_hunter = "triangle";
     eptfg_visualrepresentation_gatherer = "circle";
@@ -306,10 +314,51 @@ function eptfg_draw()
     eptfg_context.fill();
      */
     
-    if (!(typeof (eptfg_target) === "undefined" || eptfg_target === null)) drawTarget (eptfg_target, eptfg_radius, eptfg_visualrepresentation_target, eptfg_color_target, eptfg_context);
     
-    if (!(typeof (eptfg_gatherer) === "undefined" || eptfg_gatherer === null)) eptfg_gatherer.display (eptfg_context);
-    if (!(typeof (eptfg_hunter) === "undefined" || eptfg_hunter === null)) eptfg_hunter.display (eptfg_context);
+    if (!(typeof (eptfg_target) === "undefined" || eptfg_target === null))
+    {
+        if (!(typeof (eptfg_gatherer) === "undefined" || eptfg_gatherer === null) && eptfg_SHOW_GATHERDISTANCE)
+        {
+            eptfg_context.save();
+            eptfg_context.fillStyle = eptfg_color_target;
+            eptfg_context.globalAlpha = 0.25;
+            eptfg_context.beginPath();
+            eptfg_context.arc (eptfg_target.x, eptfg_target.y, eptfg_gatherdistance, 0, 2*Math.PI)
+            eptfg_context.fill();
+            eptfg_context.restore();
+        }
+        
+        drawTarget (eptfg_target, eptfg_radius, eptfg_visualrepresentation_target, eptfg_color_target, eptfg_context);
+    }
+    
+    if (!(typeof (eptfg_gatherer) === "undefined" || eptfg_gatherer === null))
+    {
+        if (eptfg_SHOW_EVADEDISTANCE)
+        {
+            eptfg_context.save();
+            eptfg_context.fillStyle = eptfg_gatherer.color;
+            eptfg_context.globalAlpha = 0.25;
+            eptfg_context.beginPath();
+            eptfg_context.arc (eptfg_gatherer.location.x, eptfg_gatherer.location.y, eptfg_evadedistance, 0, 2*Math.PI)
+            eptfg_context.fill();
+            eptfg_context.restore();
+        }
+        eptfg_gatherer.display (eptfg_context);
+    }
+    if (!(typeof (eptfg_hunter) === "undefined" || eptfg_hunter === null))
+    {
+        if (eptfg_SHOW_HUNTDISTANCE)
+        {
+            eptfg_context.save();
+            eptfg_context.fillStyle = eptfg_hunter.color;
+            eptfg_context.globalAlpha = 0.25;
+            eptfg_context.beginPath();
+            eptfg_context.arc (eptfg_hunter.location.x, eptfg_hunter.location.y, eptfg_huntdistance, 0, 2*Math.PI)
+            eptfg_context.fill();
+            eptfg_context.restore();
+        }
+        eptfg_hunter.display (eptfg_context);
+    }
     
     eptfg_context.restore();
     

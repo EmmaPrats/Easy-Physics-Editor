@@ -30,11 +30,14 @@ var eptfg_form_radius = document.getElementById("input-radius");
 
 var eptfg_form_huntdistance = document.getElementById("input-huntdistance");
 var eptfg_form_pursueweight = document.getElementById("input-pursueweight");
+var eptfg_form_show_huntdistance = document.getElementById("input-show-huntdistance");
 
 var eptfg_form_gatherdistance = document.getElementById("input-gatherdistance");
 var eptfg_form_seekweight = document.getElementById("input-seekweight");
+var eptfg_form_show_gatherdistance = document.getElementById("input-show-gatherdistance");
 var eptfg_form_evadedistance = document.getElementById("input-evadedistance");
 var eptfg_form_evadeweight = document.getElementById("input-evadeweight");
+var eptfg_form_show_evadedistance = document.getElementById("input-show-evadedistance");
 
 var eptfg_form_oriented_hunter = document.getElementById("input-oriented-hunter");
 var eptfg_form_visualrepresentation_shape_hunter = document.getElementById("input-visualrepresentation-shape-hunter");
@@ -392,11 +395,14 @@ eptfg_form_radius.addEventListener ("change", function(e){
 
 eptfg_form_huntdistance.addEventListener ("change", function(e){eptfg_huntdistance=e.target.value;});
 eptfg_form_pursueweight.addEventListener ("change", function(e){eptfg_pursueweight=e.target.value;});
+eptfg_form_show_huntdistance.addEventListener ("change", function(e){eptfg_SHOW_HUNTDISTANCE=e.target.checked;});
 
 eptfg_form_gatherdistance.addEventListener ("change", function(e){eptfg_gatherdistance=e.target.value;});
 eptfg_form_seekweight.addEventListener ("change", function(e){eptfg_seekweight=e.target.value;});
+eptfg_form_show_gatherdistance.addEventListener ("change", function(e){eptfg_SHOW_GATHERDISTANCE=e.target.checked;});
 eptfg_form_evadedistance.addEventListener ("change", function(e){eptfg_evadedistance=e.target.value;});
 eptfg_form_evadeweight.addEventListener ("change", function(e){eptfg_evadeweight=e.target.value;});
+eptfg_form_show_evadedistance.addEventListener ("change", function(e){eptfg_SHOW_EVADEDISTANCE=e.target.checked;});
 
 
 
