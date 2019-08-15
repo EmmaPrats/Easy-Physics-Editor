@@ -1,0 +1,200 @@
+body
+{
+    background-color: #EEEEEE;
+    
+    font-family: "Verdana", "Helvetica", "Arial";
+    margin: 0;
+}
+
+header
+{
+    background-color: #555555;
+    margin: 0;
+    padding: 1.6vw 2vw;
+    display: flex;
+    color: white;
+}
+
+header h1
+{
+    margin: 0;
+    padding: 0;
+    font-size: 1.7em;
+    font-family: "Impact";
+    
+    flex: auto;
+}
+
+#model-chooser-bar
+{
+    flex: auto;
+    font-size: 1em;
+}
+
+.nav-container
+{
+    display: flex;
+}
+
+.auto
+{
+    flex: auto;
+}
+
+.model-item
+{
+    margin: auto 1vw;
+    padding: 0;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+}
+
+.model-item:hover
+{
+    background-color: #AAAAAA;
+}
+
+.activemodel
+{
+    background-color: white;
+    color: black;
+}
+
+.activemodel:hover
+{
+    background-color: white;
+}
+
+.flex-container
+{
+    display: flex;
+    /*overflow: hidden;*/
+    
+    font-size: 0.9em;
+}
+
+
+.toolbar
+{
+    background-color: #AAAAAA;
+}
+
+canvas
+{
+    background-color: white;
+}
+
+.userinput-container
+{
+    background-color: #DDDDDD;
+    
+    flex: auto;
+    max-width: 400px;
+}
+
+.userinput-container p
+{
+    
+}
+
+.userinput-block
+{
+    background-color: #EEEEEE;
+    margin: 5px;
+    padding: 0;
+}
+
+.userinput-block p
+{
+    padding: 0.5em 0;
+    margin: 0;
+    text-align: center;
+}
+
+.userinput-item
+{
+    margin: 0;
+    padding: 0em 0;
+    
+    border-top: 2px solid white;
+    
+    display: flex;
+}
+
+
+.left
+{
+    flex: auto;
+    text-align: right;
+    margin-right: 1em;
+    width: 50%;
+}
+
+.right
+{
+    flex: auto;
+    width: 50%;
+}
+
+input[type=range][orient=vertical]
+{
+    writing-mode: bt-lr; /* IE */
+    -webkit-appearance: slider-vertical; /* WebKit */
+    width: 8px;
+    height: 50px;
+    padding: 0 5px;
+}
+
+.userinput-title
+{
+    margin: 0;
+    padding: 0em 0;
+    text-align: center;
+    border-top: 2px solid white;
+    
+}
+
+.exporting
+{
+    padding: 5px;
+}
+
+.exporting .nav-container
+{
+    
+    margin: 0;
+}
+
+.exporting .auto
+{
+    
+}
+
+.howtouse
+{
+    padding: auto;
+    margin: 0;
+}
+
+.downloadbutton
+{
+    text-align: right;
+}
+
+ol
+{
+    margin: 0;
+    padding: 0 2em;
+}
+
+.instructions
+{
+    
+    
+    margin: 0;
+}
+
+
+
+
