@@ -105,21 +105,21 @@ FloatingController.prototype.addEventListeners = function()
     
     //Scene params
     this.scene_scale.addEventListener ("input", function(e){
-                                       floatingController.animation.scenewidth = e.target.value;
-                                       floatingController.zoomlabel.value = e.target.value;
+                                       floatingController.animation.scenewidth = 1.0 * e.target.value;
+                                       floatingController.zoomlabel.value = 1.0 * e.target.value;
                                        });
     this.zoomlabel.addEventListener ("change", function(e){
-                                     floatingController.scene_scale.value = e.target.value;
-                                     floatingController.animation.scenewidth = e.target.value;
+                                     floatingController.scene_scale.value = 1.0 * e.target.value;
+                                     floatingController.animation.scenewidth = 1.0 * e.target.value;
                                      });
     this.waterline.addEventListener ("change", function(e){floatingController.animation.waterline = -1.0*e.target.value;});
     
     //Simulation params
     this.size.addEventListener ("change", function(e){
-                                floatingController.animation.size = e.target.value;
+                                floatingController.animation.size = 1.0 * e.target.value;
                                 floatingController.animation.initSimulation();
                                 });
-    this.gravity.addEventListener ("change", function(e){floatingController.animation.gravity.y = e.target.value;});
+    this.gravity.addEventListener ("change", function(e){floatingController.animation.gravity.y = 1.0 * e.target.value;});
     this.mass.addEventListener ("change", function(e){
                                 floatingController.animation.mass = 1.0 * e.target.value;
                                 for (let i=0; i<floatingController.animation.letters.length; i++)
@@ -159,7 +159,7 @@ FloatingController.prototype.addEventListeners = function()
                                  }
                                  });
     this.color_water.addEventListener ("change", function(e){floatingController.animation.liquidColor = e.target.value;});
-    this.opacity.addEventListener ("change", function(e){floatingController.animation.liquidOpacity = e.target.value;});
+    this.opacity.addEventListener ("change", function(e){floatingController.animation.liquidOpacity = 1.0 * e.target.value;});
     
     //Download button
     this.downloadbutton.addEventListener ("click", downloadCodeFloating);
@@ -194,7 +194,7 @@ FloatingController.prototype.setDefaultValues = function()
     this.zoomlabel.value = 5;
     this.waterline.value = 0;
     
-    this.mass.value = 1;
+    this.mass.value = 500;
     this.gravity.value = 9.8;
     this.liquiddensity.value = 1000;
     
