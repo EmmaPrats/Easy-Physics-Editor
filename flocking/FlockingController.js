@@ -199,7 +199,7 @@ FlockingController.prototype.setDefaultValues = function()
     this.zoomlabel.value = 400;
     
     this.quantity.value = 200;
-    this.radius.value = 5;
+    this.size.value = 5;
     this.separationweight.value = 1.5;
     this.alignmentweight.value = 1.0;
     this.cohesionweight.value = 1.0;
