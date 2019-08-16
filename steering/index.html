@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Steering - Easy Physics Editor</title>
+        <link rel="stylesheet" type="text/css" href="../styles.css?1003"/>
+    </head>
+    <body>
+        <header>
+            <h1>EASY PHYSICS EDITOR</h1>
+            <div id="model-chooser-bar" class="nav-container">
+                <a href="../springs/index.html" class="model-item auto">SPRINGS</a>
+                <a href="../floating/index.html" class="model-item auto">FLOATING</a>
+                <a href="../flocking/index.html"class="model-item auto">FLOCKING</a>
+                <a class="model-item auto activemodel">STEERING</a>
+            </div>
+        </header>
+        <div id="eptfg-flex-container" class="flex-container">
+            <div class="canvas-container">
+                <div class="toolbar">
+                    <input type="checkbox" id="grid" name="grid" checked/><label for="grid">Grid</label>
+                    <input type="checkbox" id="ratio-16-9" name="ratio-16-9"/><label for="ratio-16-9">&#128275;16:9</label>
+                    <input type="checkbox" id="ratio-4-3" name="ratio-4-3"/><label for="ratio-4-3">&#128275;4:3</label>
+                    <input type="checkbox" id="ratio-1-1" name="ratio-1-1"/><label for="ratio-1-1">&#128275;1:1</label>
+                    <input type="checkbox" id="ratio-3-4" name="ratio-3-4"/><label for="ratio-3-4">&#128275;3:4</label>
+                    <input type="checkbox" id="ratio-9-16" name="ratio-9-16"/><label for="ratio-9-16">&#128275;9:16</label>
+                    <input type="checkbox" name="lock-canvas-width" id="lock-canvas-width"/><label for="lock-canvas-width">&#128275;</label><span id="canvas-width">480</span>px x <input type="checkbox" name="lock-canvas-height" id="lock-canvas-height"/><label for="lock-canvas-height">&#128275;</label><span id="canvas-height">360</span>px
+                </div>
+            <canvas width="480" height="360" id="eptfg-canvas"></canvas>
+            </div>
+            <div class="userinput-container">
+                <div class="userinput-block">
+                    <p>EDIT THE SCENE</p>
+                    <div class="userinput-item">
+                        <span class="left"><input type="button" id="restart-simulation-button" value="RESTART SIMULATION"></input></span>
+                        <span class="right"><input type="button" id="default-values-button" value="SET DEFAULT VALUES"></input></span>
+                    </div>
+                    <div class="userinput-item">
+                        <span class="left">scene width</span><span class="right"><input type="range" min="100" max="1000" value="400" id="scene-scale" oninput="document.getElementById('zoomlabel').value = this.value"/><input type="number" id="zoomlabel" value="400" min="100" max="1000" onchange="document.getElementById('scene-scale').value = this.value"></input></span>
+                    </div>
+                </div>
+                <div class="userinput-block">
+                    <div class="userinput-item">
+                        <span class="left">objects size</span>
+                        <span class="right"><input type="range" min="1" max="20" step="1" value="5" id="input-radius"/></span>
+                    </div>
+                </div>
+                <div class="userinput-block">
+                    <p>EDIT THE HUNTER</p>
+                    <div class="userinput-item">
+                        <span class="left"><label for="input-active-hunter">exists</label></span>
+                        <span class="right"><input type="checkbox" id="input-active-hunter" checked="checked"/></span>
+                    </div>
+                    <div class="userinput-item">
+                        <span class="left">pray detection distance</span>
+                        <span class="right"><input type="range" min="0" max="1000" step="10" value="200" id="input-huntdistance"/><input type="checkbox" id="input-show-huntdistance"/><label for="input-show-huntdistance">&#128065;</label></span>
+                    </div>
+                    <div class="userinput-item">
+                        <span class="left">pursue</span>
+                        <span class="right"><input type="range" min="0.0" max="2.0" step="0.1" value="1.0" id="input-pursueweight"/></span>
+                    </div>
+                </div>
+                <div class="userinput-block">
+                    <p>EDIT THE GATHERER</p>
+                    <div class="userinput-item">
+                        <span class="left"><label for="input-active-gatherer">exists</label></span>
+                        <span class="right"><input type="checkbox" id="input-active-gatherer" checked="checked"/></span>
+                    </div>
+                    <div class="userinput-item">
+                        <span class="left">target detection distance</span>
+                        <span class="right"><input type="range" min="0" max="1000" step="10" value="200" id="input-gatherdistance"/><input type="checkbox" id="input-show-gatherdistance"/><label for="input-show-gatherdistance">&#128065;</label></span>
+                    </div>
+                    <div class="userinput-item">
+                        <span class="left">seek</span>
+                        <span class="right"><input type="range" min="0.0" max="2.0" step="0.1" value="1.0" id="input-seekweight"/></span>
+                    </div>
+                    <div class="userinput-item">
+                        <span class="left">hunter detection distance</span>
+                        <span class="right"><input type="range" min="0" max="1000" step="10" value="200" id="input-evadedistance"/><input type="checkbox" id="input-show-evadedistance"/><label for="input-show-evadedistance">&#128065;</label></span>
+                    </div>
+                    <div class="userinput-item">
+                        <span class="left">evade</span>
+                        <span class="right"><input type="range" min="0.0" max="2.0" step="0.1" value="1.0" id="input-evadeweight"/></span>
+                    </div>
+                </div>
+                <div class="userinput-block">
+                    <p>EDIT THE TARGET</p>
+                    <div class="userinput-item">
+                        <span class="left"><label for="input-active-target">exists</label></span>
+                        <span class="right"><input type="checkbox" id="input-active-target" checked="checked"/></span>
+                    </div>
+                </div>
+                <div class="userinput-block">
+                    <p>EDIT THE HUNTER'S AESTHETICS</p>
+                    <div class="userinput-item">
+                        <span class="left"><label for="input-oriented-hunter">oriented towards movement</label></span>
+                        <span class="right"><input type="checkbox" id="input-oriented-hunter" checked="checked"/></span>
+                        </br>
+                    </div>
+                    <div class="userinput-item">
+                        <span class="left">
+                            visual representation<br/>
+                            <input type="radio" id="input-visualrepresentation-shape-hunter" name="input-visualrepresentation-hunter" value="shape" checked="checked"/> <label for="input-visualrepresentation-shape-hunter">shape</label>
+                        </span>
+                        <span class="right">
+                            <input type="radio" id="input-shape-circle-hunter" name="input-shape-hunter" value="circle"/> <label for="input-shape-circle-hunter">circle</label><br/>
+                            <input type="radio" id="input-shape-triangle-hunter" name="input-shape-hunter" value="triangle" checked="checked"/> <label for="input-shape-triangle-hunter">triangle</label><br/>
+                            <input type="radio" id="input-shape-square-hunter" name="input-shape-hunter" value="square"/> <label for="input-shape-square-hunter">square</label><br/>
+                            <input type="color" value="#000000" id="input-color-hunter"/>
+                        </span>
+                    </div>
+                    <div class="userinput-item">
+                        <span class="left">
+                            visual representation<br/>
+                            <input type="radio" id="input-visualrepresentation-image-hunter" name="input-visualrepresentation-hunter" value"image"/> <label for="input-visualrepresentation-image-hunter">image</label>
+                        </span>
+                        <span class="right">
+                            <input type="file" accept="image/*" id="input-image-hunter"/>
+                        </span>
+                    </div>
+                </div>
+                <div class="userinput-block">
+                    <p>EDIT THE GATHERER'S AESTHETICS</p>
+                    <div class="userinput-item">
+                        <span class="left"><label for="input-oriented-gatherer">oriented towards movement</label></span>
+                        <span class="right"><input type="checkbox" id="input-oriented-gatherer" checked="checked"/></span>
+                        </br>
+                    </div>
+                    <div class="userinput-item">
+                        <span class="left">
+                            visual representation<br/>
+                            <input type="radio" id="input-visualrepresentation-shape-gatherer" name="input-visualrepresentation-gatherer" value="shape" checked="checked"/> <label for="input-visualrepresentation-shape-gatherer">shape</label>
+                        </span>
+                        <span class="right">
+                            <input type="radio" id="input-shape-circle-gatherer" name="input-shape-gatherer" value="circle" checked/> <label for="input-shape-circle-gatherer">circle</label><br/>
+                            <input type="radio" id="input-shape-triangle-gatherer" name="input-shape-gatherer" value="triangle"/> <label for="input-shape-triangle-gatherer">triangle</label><br/>
+                            <input type="radio" id="input-shape-square-gatherer" name="input-shape-gatherer" value="square"/> <label for="input-shape-square-gatherer">square</label><br/>
+                            <input type="color" value="#000000" id="input-color-gatherer"/>
+                        </span>
+                    </div>
+                    <div class="userinput-item">
+                        <span class="left">
+                            visual representation<br/>
+                            <input type="radio" id="input-visualrepresentation-image-gatherer" name="input-visualrepresentation-gatherer" value"image"/> <label for="input-visualrepresentation-image-gatherer">image</label>
+                        </span>
+                        <span class="right">
+                            <input type="file" accept="image/*" id="input-image-gatherer"/>
+                        </span>
+                    </div>
+                </div>
+                <div class="userinput-block">
+                    <p>EDIT THE TARGET'S AESTHETICS</p>
+                    <div class="userinput-item">
+                        <span class="left">
+                            visual representation<br/>
+                            <input type="radio" id="input-visualrepresentation-shape-target" name="input-visualrepresentation-target" value="shape" checked="checked"/> <label for="input-visualrepresentation-shape-target">shape</label>
+                        </span>
+                        <span class="right">
+                            <input type="radio" id="input-shape-circle-target" name="input-shape-target" value="circle"/> <label for="input-shape-circle-target">circle</label><br/>
+                            <input type="radio" id="input-shape-triangle-target" name="input-shape-target" value="triangle"/> <label for="input-shape-triangle-target">triangle</label><br/>
+                            <input type="radio" id="input-shape-square-target" name="input-shape-target" value="square" checked/> <label for="input-shape-square-target">square</label><br/>
+                            <input type="color" value="#000000" id="input-color-target"/>
+                        </span>
+                    </div>
+                    <div class="userinput-item">
+                        <span class="left">
+                            visual representation<br/>
+                            <input type="radio" id="input-visualrepresentation-image-target" name="input-visualrepresentation-target" value"image"/> <label for="input-visualrepresentation-image-target">image</label>
+                        </span>
+                        <span class="right">
+                            <input type="file" accept="image/*" id="input-image-target"/>
+                        </span>
+                    </div>
+                </div>
+                <div class="exporting">
+                    <div class="nav-container">
+                        <div class="auto howtouse">HOW TO USE</div>
+                        <div class="auto downloadbutton"><input type="button" value="DOWNLOAD" id="button-downloadfile"/></div>
+                    </div>
+                    <div class="instructions">
+                        <ol>
+                            <li>Edit the animation.</li>
+                            <li>Download the animation file.</li>
+                            <li>Place the file in your website directory.</li>
+                            <li>Add <code>&lt;canvas id="EasyPhysics"&gt;&lt;/canvas&gt;</code> to your webpage.</li>
+                            <li>Add <code>&lt;script src="EasyPhysicsAnimation.js"&gt;&lt;/script&gt;</code> to your webpage, right before the <code>&lt;/body&gt;</code> tag.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <script src="../EasyPhysics.js?1006"></script>
+            <script src="SteeringController.js?1005"></script>
+    </body>
+</html>

@@ -70,6 +70,9 @@ function SpringsController()
     this.addEventListeners();
 }
 
+/**
+ * Adds event listeners to all input elements.
+ */
 SpringsController.prototype.addEventListeners = function()
 {
     //Canvas resizing
