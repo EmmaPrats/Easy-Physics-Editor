@@ -55,6 +55,7 @@ function FloatingAnimation (canvas, EDITMODE = false)
  * eptfgSettingsFloating.liquidcolor
  * eptfgSettingsFloating.liquidopacity
  * @param {bool} [EDITMODE=false] wether the animation is being edited
+ * @param {Object} settings object that contains settings
  */
 FloatingAnimation.prototype.initParams = function (EDITMODE = false, settings)
 {
