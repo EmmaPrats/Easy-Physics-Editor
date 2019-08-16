@@ -136,7 +136,7 @@ SpringsController.prototype.addEventListeners = function()
     //Simulation params
     this.size.addEventListener ("change", function(e){
                                 springsController.animation.size = e.target.value;
-                                springsController.animation.initSprings();
+                                springsController.animation.initSimulation();
                                 });
     this.mass.addEventListener ("change", function(e) {
                                 springsController.animation.mass = e.target.value;
