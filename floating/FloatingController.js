@@ -162,7 +162,8 @@ FloatingController.prototype.addEventListeners = function()
     this.opacity.addEventListener ("change", function(e){floatingController.animation.liquidOpacity = 1.0 * e.target.value;});
     
     //Download button
-    this.downloadbutton.addEventListener ("click", downloadCodeFloating);
+    if (typeof (this.downloadbutton) !== "undefined" && this.downloadbutton != null)
+        this.downloadbutton.addEventListener ("click", downloadCodeFloating);
 };
 
 /**
