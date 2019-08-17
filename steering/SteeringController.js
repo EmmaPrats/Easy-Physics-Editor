@@ -66,6 +66,8 @@ function SteeringController()
     this.color_hunter = document.getElementById("input-color-hunter");
     this.visualrepresentation_image_hunter = document.getElementById("input-visualrepresentation-image-hunter");
     this.image_hunter = document.getElementById("input-image-hunter");
+    this.imagesrc_hunter = document.getElementById("image-src-hunter");
+    this.imagepreview_hunter = document.getElementById("image-preview-hunter");
     
     this.oriented_gatherer = document.getElementById("input-oriented-gatherer");
     this.visualrepresentation_shape_gatherer = document.getElementById("input-visualrepresentation-shape-gatherer");
@@ -75,6 +77,8 @@ function SteeringController()
     this.color_gatherer = document.getElementById("input-color-gatherer");
     this.visualrepresentation_image_gatherer = document.getElementById("input-visualrepresentation-image-gatherer");
     this.image_gatherer = document.getElementById("input-image-gatherer");
+    this.imagesrc_gatherer = document.getElementById("image-src-gatherer");
+    this.imagepreview_gatherer = document.getElementById("image-preview-gatherer");
     
     this.visualrepresentation_shape_target = document.getElementById("input-visualrepresentation-shape-target");
     this.shape_circle_target = document.getElementById("input-shape-circle-target");
@@ -83,6 +87,8 @@ function SteeringController()
     this.color_target = document.getElementById("input-color-target");
     this.visualrepresentation_image_target = document.getElementById("input-visualrepresentation-image-target");
     this.image_target = document.getElementById("input-image-target");
+    this.imagesrc_target = document.getElementById("image-src-target");
+    this.imagepreview_target = document.getElementById("image-preview-target");
     
     this.active_hunter = document.getElementById("input-active-hunter");
     this.active_gatherer = document.getElementById("input-active-gatherer");
@@ -91,6 +97,22 @@ function SteeringController()
     this.imageObject_hunter;
     this.imageObject_gatherer;
     this.imageObject_target;
+    
+    if (typeof this.imagesrc_hunter.value !== "undefined" && this.imagesrc_hunter.value != "" && this.imagesrc_hunter.value != null)
+    {
+        this.imageObject_hunter = new Image();
+        this.imageObject_hunter.src = this.imagesrc_hunter.value;
+    }
+    if (typeof this.imagesrc_gatherer.value !== "undefined" && this.imagesrc_gatherer.value != "" && this.imagesrc_gatherer.value != null)
+    {
+        this.imageObject_gatherer = new Image();
+        this.imageObject_gatherer.src = this.imagesrc_gatherer.value;
+    }
+    if (typeof this.imagesrc_target.value !== "undefined" && this.imagesrc_target.value != "" && this.imagesrc_target.value != null)
+    {
+        this.imageObject_target = new Image();
+        this.imageObject_target.src = this.imagesrc_target.value;
+    }
     
     this.restartsimulation = document.getElementById("restart-simulation-button");
     this.defaultvalues = document.getElementById("default-values-button");
@@ -259,7 +281,8 @@ SteeringController.prototype.addEventListeners = function()
     this.image_target.addEventListener ("change", imageChangeTarget);
     this.color_target.addEventListener ("change", function(e){steeringController.animation.color_target = e.target.value;});
     
-    this.downloadbutton.addEventListener ("click", downloadCodeSteering);
+    if (typeof (this.downloadbutton) !== "undefined" && this.downloadbutton != null)
+        this.downloadbutton.addEventListener ("click", downloadCodeSteering);
 }
 
 /**
@@ -593,6 +616,8 @@ function imageChangeHunter (event)
         steeringController.animation.visualrepresentation_hunter.src = reader.result;
         steeringController.imageObject_hunter = new Image();
         steeringController.imageObject_hunter.src = reader.result;
+        steeringController.imagepreview_hunter.src = reader.result;
+        steeringController.imagesrc_hunter.value = reader.result;
     }
     if (file)
     {
@@ -617,6 +642,8 @@ function imageChangeGatherer (event)
         steeringController.animation.visualrepresentation_gatherer.src = reader.result;
         steeringController.imageObject_gatherer = new Image();
         steeringController.imageObject_gatherer.src = reader.result;
+        steeringController.imagepreview_gatherer.src = reader.result;
+        steeringController.imagesrc_gatherer.value = reader.result;
     }
     if (file)
     {
@@ -639,6 +666,8 @@ function imageChangeTarget (event)
         steeringController.animation.visualrepresentation_target.src = reader.result;
         steeringController.imageObject_target = new Image();
         steeringController.imageObject_target.src = reader.result;
+        steeringController.imagepreview_target.src = reader.result;
+        steeringController.imagesrc_target.value = reader.result;
     }
     if (file)
     {
