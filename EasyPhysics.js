@@ -1838,6 +1838,7 @@ function FloatingAnimation (canvas, EDITMODE = false)
  * eptfgSettingsFloating.EDITMODE
  * eptfgSettingsFloating.GRID
  * eptfgSettingsFloating.scenewidth
+ * eptfgSettingsFloating.waterline
  * eptfgSettingsFloating.gravity
  * eptfgSettingsFloating.size
  * eptfgSettingsFloating.mass
@@ -2202,6 +2203,7 @@ function FlockingAnimation (canvas, EDITMODE = false)
  * eptfgSettingsFlocking.cohesionweight
  * eptfgSettingsFlocking.visualrepresentation
  * eptfgSettingsFlocking.shape
+ * eptfgSettingsFlocking.image
  * eptfgSettingsFlocking.ORIENTED
  * eptfgSettingsFlocking.color
  * @param {bool} [EDITMODE=false] wether the animation is being edited
@@ -2258,9 +2260,10 @@ FlockingAnimation.prototype.initParams = function (EDITMODE = false, settings)
         this.cohesionweight = (typeof eptfgSettingsFlocking.cohesionweight !== "undefined") ? (1.0 * eptfgSettingsFlocking.cohesionweight) : this.cohesionweight;
         
         var visualrepresentation = (typeof eptfgSettingsFlocking.visualrepresentation !== "undefined") ? eptfgSettingsFlocking.visualrepresentation : this.visualrepresentation;
-        if (visualrepresentation == "image")
+        if (visualrepresentation == "image" && typeof eptfgSettingsFlocking.image !== "undefined" && eptfgSettingsFlocking.image != "")
         {
-            //TODO image
+            this.visualrepresentation = new Image();
+            this.visualrepresentation.src = eptfgSettingsFlocking.image;
         }
         else
         {
@@ -2506,9 +2509,6 @@ function SteeringAnimation (canvas, EDITMODE = false)
     this.initSimulation();
 }
 
-//SteeringAnimation.prototype = Object.create (EasyPhysicsAnimation.prototype);
-//SteeringAnimation.prototype.constructor = SteeringAnimation;
-
 /**
  * Initializes all parameters with given settings or default values.
  * If global object eptfgSettingsSteering exists, initializes with its parameters:
@@ -2528,12 +2528,18 @@ function SteeringAnimation (canvas, EDITMODE = false)
  * eptfgSettingsSteering.seekweight
  * eptfgSettingsSteering.evadeweight
  * eptfgSettingsSteering.visualrepresentation_hunter
+ * eptfgSettingsSteering.shape_hunter
+ * eptfgSettingsSteering.image_hunter
  * eptfgSettingsSteering.ORIENTEDTOWARDSMOVEMENT_hunter
  * eptfgSettingsSteering.color_hunter
  * eptfgSettingsSteering.visualrepresentation_gatherer
+ * eptfgSettingsSteering.shape_gatherer
+ * eptfgSettingsSteering.image_gatherer
  * eptfgSettingsSteering.ORIENTEDTOWARDSMOVEMENT_gatherer
  * eptfgSettingsSteering.color_gatherer
  * eptfgSettingsSteering.visualrepresentation_target
+ * eptfgSettingsSteering.shape_target
+ * eptfgSettingsSteering.image_target
  * eptfgSettingsSteering.color_target
  * @param {bool} [EDITMODE=false] wether the animation is being edited
  * @param {Object} settings object that contains settings
@@ -2670,27 +2676,30 @@ SteeringAnimation.prototype.initParams = function (EDITMODE = false, settings)
         this.evadeweight = (typeof eptfgSettingsSteering.evadeweight !== "undefined") ? (1 * eptfgSettingsSteering.evadeweight) : this.evadeweight;
         
         var visualrepresentation_hunter = (typeof eptfgSettingsSteering.visualrepresentation_hunter !== "undefined") ? eptfgSettingsSteering.visualrepresentation_hunter : this.visualrepresentation_hunter;
-        if (visualrepresentation_hunter == "image")
+        if (visualrepresentation_hunter == "image" && typeof eptfgSettingsSteering.image_hunter !== "undefined" && eptfgSettingsSteering.image_hunter != "")
         {
-            //TODO image
+            this.visualrepresentation_hunter = new Image();
+            this.visualrepresentation_hunter.src = eptfgSettingsSteering.image_hunter;
         }
         else
         {
             this.visualrepresentation_hunter = (typeof eptfgSettingsSteering.shape_hunter !== "undefined") ? eptfgSettingsSteering.shape_hunter : this.visualrepresentation_hunter;
         }
         var visualrepresentation_gatherer = (typeof eptfgSettingsSteering.visualrepresentation_gatherer !== "undefined") ? eptfgSettingsSteering.visualrepresentation_gatherer : this.visualrepresentation_gatherer;
-        if (visualrepresentation_gatherer == "image")
+        if (visualrepresentation_gatherer == "image" && typeof eptfgSettingsSteering.image_gatherer !== "undefined" && eptfgSettingsSteering.image_gatherer != "")
         {
-            //TODO image
+            this.visualrepresentation_gatherer = new Image();
+            this.visualrepresentation_gatherer.src = eptfgSettingsSteering.image_gatherer;
         }
         else
         {
             this.visualrepresentation_gatherer = (typeof eptfgSettingsSteering.shape_gatherer !== "undefined") ? eptfgSettingsSteering.shape_gatherer : this.visualrepresentation_gatherer;
         }
         var visualrepresentation_target = (typeof eptfgSettingsSteering.visualrepresentation_target !== "undefined") ? eptfgSettingsSteering.visualrepresentation_target : this.visualrepresentation_target;
-        if (visualrepresentation_target == "image")
+        if (visualrepresentation_target == "image" && typeof eptfgSettingsSteering.image_target !== "undefined" && eptfgSettingsSteering.image_target != "")
         {
-            //TODO image
+            this.visualrepresentation_target = new Image();
+            this.visualrepresentation_target.src = eptfgSettingsSteering.image_target;
         }
         else
         {
