@@ -202,7 +202,8 @@ SpringsController.prototype.addEventListeners = function()
                                  });
     
     //Download button
-    this.downloadbutton.addEventListener ("click", downloadCodeSprings);
+    if (typeof (this.downloadbutton) !== "undefined" && this.downloadbutton != null)
+        this.downloadbutton.addEventListener ("click", downloadCodeSprings);
 }
 
 /**
