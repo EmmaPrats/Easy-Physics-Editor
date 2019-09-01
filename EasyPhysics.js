@@ -1,5 +1,3 @@
-"use strict";
-
 /**
  * Returns a random number between the arguments.
  * @param {number} min
@@ -7,6 +5,17 @@
  * @returns {number} random number between min and max
  */
 function getRandomBetween (min, max)
+{
+    return Math.random() * (max - min) + min;
+}
+
+/**
+ * Returns a random number between the arguments.
+ * @param {number} min
+ * @param {number} max
+ * @returns {number} random number between min and max
+ */
+Math.getRandomBetween = function (min, max)
 {
     return Math.random() * (max - min) + min;
 }
@@ -170,7 +179,7 @@ Vector.prototype.mult = function (scalar)
  * Returns a new Vector that is the result of multiplying the vector and number passed.
  * @param {Vector} vector vector to copy
  * @param {number} scalar number to multiply the vector by
- * @returns {Vector} vector that is a copy of the one passed, scaled by the number passed
+ * @returns {Vector} vector that is a copy of the one passed, scaled by the number passed
  */
 Vector.mult = function (vector, scalar)
 {
@@ -191,7 +200,7 @@ Vector.prototype.div = function (scalar)
  * Returns a new Vector that is the result of dividing the vector by the number passed.
  * @param {Vector} vector vector to copy
  * @param {number} scalar number to divide the vector by
- * @returns {Vector} vector that is a copy of the one passed, divided by the number passed
+ * @returns {Vector} vector that is a copy of the one passed, divided by the number passed
  */
 Vector.div = function (vector, scalar)
 {
@@ -220,8 +229,7 @@ Vector.prototype.limit = function (magnitude)
 Vector.dot = function (vector1, vector2)
 {
     return vector1.x * vector2.x + vector1.y * vector2.y;
-}
-
+};
 
 /**
  * Creates a SimulationObject.
@@ -233,9 +241,10 @@ Vector.dot = function (vector1, vector2)
  * @param {Vector} acceleration acceleration of the object, is updated each step
  * @param {bool} orientedTowardsMovement wether it's oriented towards its velocity vector
  */
-function SimulationObject (visualrepresentation, radius, location, velocity, acceleration, orientedTowardsMovement = false)
+function SimulationObject (visualrepresentation, mass, radius, location, velocity, acceleration, orientedTowardsMovement = false)
 {
     this.visualrepresentation = visualrepresentation;
+    this.mass = mass;
     this.radius = radius * 1.0;
     this.location = location;
     this.velocity = velocity;
@@ -272,7 +281,7 @@ SimulationObject.prototype.applyAcceleration = function (acceleration)
  */
 SimulationObject.prototype.applyForce = function (force)
 {
-    this.acceleration.add (force);
+    this.acceleration.add (Vector.div (force, this.mass));
 };
 
 /**
@@ -363,7 +372,7 @@ SimulationObject.prototype.display = function (context)
  */
 function Boid (visualrepresentation, radius, location, velocity, acceleration, maxspeed, maxforce, orientedTowardsMovement = true)
 {
-    SimulationObject.call (this, visualrepresentation, radius, location, velocity, acceleration, orientedTowardsMovement);
+    SimulationObject.call (this, visualrepresentation, 1, radius, location, velocity, acceleration, orientedTowardsMovement);
     
     this.maxspeed = maxspeed;
     this.maxforce = maxforce;
@@ -371,7 +380,7 @@ function Boid (visualrepresentation, radius, location, velocity, acceleration, m
     this.circleDistance = 3 * this.radius;
     this.circleRadius = 1.5 * this.radius;
     this.wanderAngle = 0;
-
+    
 }
 
 Boid.prototype = Object.create (SimulationObject.prototype);
@@ -629,7 +638,7 @@ Boid.prototype.pursueIfNear = function (target, distance, dt)
     {
         return new Vector();
     }
-}
+};
 
 /**
  * Returns the steering force that will move the boid away from a target.
@@ -719,7 +728,7 @@ Boid.prototype.wander = function()
     var steer = Vector.sub (desired, this.velocity);
     steer.limit (this.maxforce);
     return steer;
-}
+};
 
 /**
  * Creates a Flock. Contains an empty array of boids that you have to fill.
@@ -819,81 +828,6 @@ Flock.prototype.boidSizeChange = function (size)
     this.neighbourdist = size * Flock.neighbourdistancetoradiusratio;
 };
 
-//TODO FloatingObject. No m'agrada cap nom
-//TODO posar el mass ací o al final? Crec que millor ací
-//TODO necessita un mètode run? per a posar l'acceleració ahí, per exemple, i cridar a compute forces.
-
-/**
- * Creates a Particle.
- * @class
- * @extends SimulationObject
- * @param {string,Image} visualrepresentation visual representation of the particle
- * @param {number} mass mas of the particle
- * @param {number} radius radius of the particle
- * @param {Vector} location location of the particle, is updated each step
- * @param {Vector} velocity velocity of the particle, is updated each step
- * @param {Vector} acceleration acceleration of the particle, is updated each step
- * @param {bool} [orientedTowardsMovement=false] wether it's oriented towards its velocity vector
- * @classdesc A Particle is a SimulationObject that has mass.
- */
-function Particle (visualrepresentation, mass, radius, location, velocity, acceleration, orientedTowardsMovement = false)
-{
-    SimulationObject.call (this, visualrepresentation, radius, location, velocity, acceleration, orientedTowardsMovement);
-    
-    this.mass = mass;
-}
-
-Particle.prototype = Object.create (SimulationObject.prototype);
-Particle.prototype.constructor = Particle;
-
-/**
- * Calculates the acceleration that the given force generates on this object and adds it to it.
- * @override
- * @param {Vector} force force applied
- */
-Particle.prototype.applyForce = function (force)
-{
-    this.acceleration.add (Vector.div (force, this.mass));
-};
-
-/**
- * Calculates flotation force and applies it to this particle. It considers this particle is a sphere.
- * @param {Vector} gravity gravity acceleration
- * @param {number} liquidDensity density of liquid
- * @param {number} sealevel level of water
- * @param {number} floor level of floor
- */
-Particle.prototype.applyFlotationForces = function (gravity, liquidDensity, sealevel, floor)
-{
-    if (this.location.y + this.radius >= sealevel)
-    {
-        var Vs = 0;
-        
-        if (this.location.y - this.radius >= sealevel) //Totalmente submergido
-        {
-            Vs = 4 * Math.PI * this.radius * this.radius * this.radius / 3;
-            
-            if (this.location.y + this.radius >= floor) //Centro por debajo del suelo
-            {
-                //alert (this.location.y);
-            }
-        }
-        else //Sección submergida
-        {
-            var h = this.location.y + this.radius - sealevel;
-            var a = Math.sqrt (2 * h * this.radius - h * h);
-            Vs = (3 * a * a + h * h) * Math.PI * h / 6;
-        }
-        var Fb = liquidDensity * gravity * Vs;
-        var flotacion = new Vector (0, -Fb);
-        this.applyForce (flotacion);
-        
-        //Friction in water
-        var friction = Vector.mult (this.velocity, -0.8);
-        this.applyForce (friction);
-    }
-};
-
 /**
  * Creates a RigidBox.
  * @class
@@ -907,8 +841,7 @@ Particle.prototype.applyFlotationForces = function (gravity, liquidDensity, seal
  */
 function RigidBox (mass, size, location, velocity, acceleration)
 {
-    SimulationObject.call (this, "circle", (size.x+size.y)/2, location, velocity, acceleration, false);
-    this.mass = mass;
+    SimulationObject.call (this, "circle", mass, (size.x+size.y)/2, location, velocity, acceleration, false);
     this.size = size;
     this.angularVelocity = 0;
     this.angularAcceleration = 0;
@@ -977,7 +910,7 @@ RigidBox.prototype.applyForceTo = function (force, point)
  * Calculates flotation force and torque and applies it to this particle.
  * @param {Vector} gravity gravity acceleration
  * @param {number} liquidDensity density of liquid
- * @param {number} sealevel level of water
+ * @param {number} sealevel level of water
  */
 RigidBox.prototype.applyFlotationForces = function (gravity, liquidDensity, sealevel)
 {
@@ -1057,89 +990,116 @@ RigidBox.prototype.display = function (context)
  * Creates a RigidLetter.
  * @class
  * @extends RigidBox
- * @param {string} letter character
+ * @param {string} character character
  * @param {string} font font of the character (in px)
  * @param {number} mass mass of the letter
- * @param {number} size font size of the character
+ * @param {number} fontSize font size of the character
  * @param {Vector} location location of the letter, is updated each step
  * @param {Vector} velocity velocity of the letter, is updated each step
  * @param {Vector} acceleration acceleration of the letter, is updated each step
  * @classdesc A RigidLetter is a rigid body in the shape of a character.
  */
-function RigidLetter (letter, font, mass, size, location, velocity, acceleration)
+function RigidLetter (character, font, mass, fontSize, location, velocity, acceleration)
 {
-    //1. Find points
+    RigidBox.call (this, mass, new Vector (fontSize, fontSize), location, velocity, acceleration);
+    
+    var gridSize = 10;
+    
+    //POINTS, OFFSET FOR DRAWING CHARACTER
+    this.points = RigidLetter.getPointsForRBD (character, font, fontSize, gridSize);
+    this.letterLocation = this.points.pop();
+    
+    //ROTATED POINTS
+    this.rotatedPoints = [];
+    for (let i=0; i<this.points.length; i++)
+    {
+        this.rotatedPoints.push (new Vector (this.points[i].x, this.points[i].y));
+    }
+    
+    //BOUNDING BOX
+    var minX = this.points[0].x, maxX = this.points[0].x, minY = this.points[0].y, maxY = this.points[0].y;
+    for (let i=1; i<this.points.length; i++)
+    {
+        if (this.points[i].x < minX)
+            minX = this.points[i].x;
+        else if (this.points[i].x > maxX)
+            maxX = this.points[i].x;
+        if (this.points[i].y < minY)
+            minY = this.points[i].y;
+        else if (this.points[i].y > maxY)
+            maxY = this.points[i].y;
+    }
+    gridSize *= fontSize / 100;
+    this.size = new Vector (maxX - minX + gridSize, maxY - minY + gridSize);
+    
+    //POINT VOLUME AND MASS
+    this.pointVolume = gridSize * gridSize * gridSize; //We are making it 3D for simulation purposes only
+    this.pointMass = this.mass / this.points.length;
+    
+    this.letter = character;
+    this.font = fontSize + "px " + font;
+}
+
+RigidLetter.prototype = Object.create (RigidBox.prototype);
+RigidLetter.prototype.constructor = RigidLetter;
+
+/**
+ * Calculates and returns an array containing all points belonging to the character.
+ * Points are sampled with gridSize accuracy.
+ * The last element in the returned array is the character's offsetForDrawing. Use pop() to retrieve and remove it.
+ * @param {character} character the character to get points from
+ * @param {string} font font of the character
+ * @param {integer} fontSize font size of the character
+ * @param {integer} [gridSize=10] grid size for sampling accuracy
+ * @returns {Array<Vector>} array containing all points and offsetForDrawing in object coordinates.
+ */
+RigidLetter.getPointsForRBD = function (character, font, fontSize, gridSize = 10)
+{
+    //1. Create canvas
     var canvas = document.createElement ("canvas");
     canvas.width = 100;
     canvas.height = 150;
     var context = canvas.getContext("2d");
     
-    //1.1. Draw letter
+    //2. Draw character
     context.font = "100px " + font;
     context.fillStyle = "#000000";
-    context.fillText (letter, 20, 100);
+    context.fillText (character, 20, 100);
     
-    //1.2. Find points
-    var gridSize = 10;
-    var realPoints = [];
+    //3. Find points and center of mass
+    var points = [];
     var centerOfMass = new Vector();
-    var minX = 0, maxX = 0, minY = 0, maxY = 0;
     for (var i=gridSize/2; i<100; i+=gridSize)
     {
         for (var j=gridSize/2; j<150; j+=gridSize)
         {
             if (context.getImageData(i,j,1,1).data[3] > 0)
             {
-                realPoints.push (new Vector (i, j));
-                centerOfMass.add (new Vector (i, j));
-                
-                //For calculating bounding box size
-                if (i < minX) minX = i;
-                else if (i > maxX) maxX = i;
-                if (j < minY) minY = j;
-                else if (j > maxY) maxY = j;
+                points.push (new Vector (i, j));
+                centerOfMass.x += i;
+                centerOfMass.y += j;
             }
         }
     }
-    centerOfMass.div (realPoints.length);
-    var boundingBoxSize = new Vector (maxX - minX + gridSize, maxY - minY + gridSize); //super
-    boundingBoxSize.mult (size/100);
+    if (points.length == 0) points.push (new Vector());
+    centerOfMass.div (points.length);
     
-    RigidBox.call (this, mass, boundingBoxSize, location, velocity, acceleration);
-    
-    this.letterLocation = new Vector (20-centerOfMass.x, 100-centerOfMass.y); //in local coordinates
-    this.letterLocation.mult (size/100);
-    this.points = realPoints; //Constructor calculated the 4 points for the bounding box.
-    for (var i=0; i<this.points.length; i++)
+    //4. Get points in local coordinates and the right size
+    for (let i=0; i<points.length; i++)
     {
-        this.points[i].sub (centerOfMass);
-        this.points[i].mult (size/100);
-    }
-    //now all points are in local coordinates
-    
-    this.rotatedPoints = []; //Constructor calculated the 4 points for the bounding box.
-    for (var i=0; i<this.points.length; i++)
-    {
-        this.rotatedPoints.push (new Vector (
-                                             this.points[i].x * Math.cos(this.angle) - this.points[i].y * Math.sin(this.angle),
-                                             this.points[i].x * Math.sin(this.angle) + this.points[i].y * Math.cos(this.angle)
-                                             ));
+        points[i].sub (centerOfMass);
+        points[i].mult (fontSize/100);
     }
     
-    //We will assume each point has   mass = box_mass   / number_of_points
-    //We will assume each point has volume = box_volume / number_of_points
-    //We will assume that the rectangle is a box with depth = avg(width, height)
-    //So box_volume = width * height * depth = width * height * (width + height)/2
-    //The volume thing is so I can use "real world" values.
-    this.pointVolume = this.size.x * this.size.y * (this.size.x + this.size.y)/2 / this.points.length;
-    this.pointMass = this.mass / this.points.length;
+    //5. Calculate offset for drawing the character
+    var offsetForDrawing = new Vector (20-centerOfMass.x, 100-centerOfMass.y); //in local coordinates
+    offsetForDrawing.mult (fontSize/100); //and the right size
     
-    this.letter = letter;
-    this.font = size + "px " + font;
+    //6. Last element of points array is offsetForDrawing
+    points.push (offsetForDrawing);
+    
+    return points;
 }
-
-RigidLetter.prototype = Object.create (RigidBox.prototype);
-RigidLetter.prototype.constructor = RigidLetter;
 
 /**
  * Renders this object on the context passed.
@@ -1526,13 +1486,13 @@ SpringsAnimation.prototype.initSimulation = function()
     
     for (let i=0; i<this.text.length; i++)
     {
-        this.letters.push (new Particle (new Character (this.text[i], this.font, this.size, this.color),
-                                         this.mass,
-                                         this.size,
-                                         new Vector (this.letterlocations[i].x, this.letterlocations[i].y),
-                                         new Vector(),
-                                         new Vector(),
-                                         false)
+        this.letters.push (new SimulationObject (new Character (this.text[i], this.font, this.size, this.color),
+                                                 this.mass,
+                                                 this.size,
+                                                 new Vector (this.letterlocations[i].x, this.letterlocations[i].y),
+                                                 new Vector(),
+                                                 new Vector(),
+                                                 false)
                            );
         this.letters[i].color = this.color;
         this.letters[i].visualrepresentation.color = this.color;
@@ -1861,7 +1821,7 @@ FloatingAnimation.prototype.initParams = function (EDITMODE = false, settings)
     
     this.gravity = new Vector (0, 9.8);
     this.size = 1;
-    this.mass = 500;
+    this.mass = 5;
     this.liquidDensity = 1000;
     this.text = "Easy Physics";
     
@@ -3129,3 +3089,5 @@ SteeringAnimation.drawGrid = function (context, scenewidth)
     
     context.restore();
 };
+
+
