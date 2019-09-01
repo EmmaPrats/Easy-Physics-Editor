@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Easy Physics Editor</title>
+        <style>
+            body
+            {
+                vertical-align: middle;
+                font-family: "Verdana", "Helvetica", "Arial";
+            }
+            header
+            {
+                margin: auto;
+                width: 50%;
+                height: 50%;
+            }
+        
+        .container {
+            height: 400px;
+            position: relative;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .vertical-center {
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+            width: 100%;
+        }
+        
+        
+        header h1
+        {
+            margin: 0;
+            padding: 0;
+            font-size: 5vw;
+            font-family: "Impact";
+            margin-bottom: 5vh;
+        }
+        
+        #model-chooser-bar
+        {
+            font-size: 2vw;
+            width: 610px;
+            margin: auto;
+        }
+        
+        .nav-container
+        {
+            display: flex;
+        }
+        
+        .auto
+        {
+            flex: auto;
+        }
+        
+        .model-item
+        {
+            margin: auto 1vw;
+            padding: 0;
+            text-align: center;
+            text-decoration: none;
+            color: black;
+        }
+        
+        .model-item:hover
+        {
+            background-color: #555555;
+            color:white;
+        }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+        <header class="vertical-center">
+            <h1>EASY PHYSICS EDITOR</h1>
+            <div id="model-chooser-bar" class="nav-container">
+                <a href="springs/index.html" class="model-item auto">SPRINGS</a>
+                <a href="floating/index.html"class="model-item auto">FLOATING</a>
+                <a href="flocking/index.html" class="model-item auto">FLOCKING</a>
+                <a href="steering/index.html" class="model-item auto">STEERING</a>
+            </div>
+        </header>
+        <div>
+    </body>
+</html>
