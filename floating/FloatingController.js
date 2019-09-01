@@ -195,7 +195,7 @@ FloatingController.prototype.setDefaultValues = function()
     this.zoomlabel.value = 5;
     this.waterline.value = 0;
     
-    this.mass.value = 500;
+    this.mass.value = 5;
     this.gravity.value = 9.8;
     this.liquiddensity.value = 1000;
     
