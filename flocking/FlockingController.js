@@ -62,10 +62,13 @@ function FlockingController()
     this.imagesrc = document.getElementById("image-src");
     this.imagepreview = document.getElementById("image-preview");
     this.imageObject;
-    if (typeof this.imagesrc.value !== "undefined" && this.imagesrc.value != "" && this.imagesrc.value != null)
+    if (typeof this.imagesrc !== "undefined" && this.imagesrc != null)
     {
-        this.imageObject = new Image();
-        this.imageObject.src = this.imagesrc.value;
+        if (typeof this.imagesrc.value !== "undefined" && this.imagesrc.value != "" && this.imagesrc.value != null)
+        {
+            this.imageObject = new Image();
+            this.imageObject.src = this.imagesrc.value;
+        }
     }
     
     this.oriented = document.getElementById("input-oriented");

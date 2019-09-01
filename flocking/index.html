@@ -82,10 +82,12 @@
                     <div class="userinput-item">
                         <span class="left">
                             visual representation:<br/>
-                            <input type="radio" id="input-visualrepresentation-image" name="input-visualrepresentation" value"image"/> <label for="input-visualrepresentation-image">image</label>
+                            <input type="radio" id="input-visualrepresentation-image" name="input-visualrepresentation" value="image"/> <label for="input-visualrepresentation-image">image</label>
                         </span>
                         <span class="right">
                             <input type="file" accept="image/*" id="input-image"/>
+                            <input type="hidden" id="image-src"/>
+                            <img id="image-preview" width="50" height="50"/>
                         </span>
                     </div>
                 </div>

@@ -112,10 +112,12 @@
                     <div class="userinput-item">
                         <span class="left">
                             visual representation<br/>
-                            <input type="radio" id="input-visualrepresentation-image-hunter" name="input-visualrepresentation-hunter" value"image"/> <label for="input-visualrepresentation-image-hunter">image</label>
+                            <input type="radio" id="input-visualrepresentation-image-hunter" name="input-visualrepresentation-hunter" value="image"/> <label for="input-visualrepresentation-image-hunter">image</label>
                         </span>
                         <span class="right">
                             <input type="file" accept="image/*" id="input-image-hunter"/>
+                            <input type="hidden" id="image-src-hunter"/>
+                            <img id="image-preview-hunter" width="50" height="50"/>
                         </span>
                     </div>
                 </div>
@@ -141,10 +143,12 @@
                     <div class="userinput-item">
                         <span class="left">
                             visual representation<br/>
-                            <input type="radio" id="input-visualrepresentation-image-gatherer" name="input-visualrepresentation-gatherer" value"image"/> <label for="input-visualrepresentation-image-gatherer">image</label>
+                            <input type="radio" id="input-visualrepresentation-image-gatherer" name="input-visualrepresentation-gatherer" value="image"/> <label for="input-visualrepresentation-image-gatherer">image</label>
                         </span>
                         <span class="right">
                             <input type="file" accept="image/*" id="input-image-gatherer"/>
+                            <input type="hidden" id="image-src-gatherer"/>
+                            <img id="image-preview-gatherer" width="50" height="50"/>
                         </span>
                     </div>
                 </div>
@@ -165,10 +169,12 @@
                     <div class="userinput-item">
                         <span class="left">
                             visual representation<br/>
-                            <input type="radio" id="input-visualrepresentation-image-target" name="input-visualrepresentation-target" value"image"/> <label for="input-visualrepresentation-image-target">image</label>
+                            <input type="radio" id="input-visualrepresentation-image-target" name="input-visualrepresentation-target" value="image"/> <label for="input-visualrepresentation-image-target">image</label>
                         </span>
                         <span class="right">
                             <input type="file" accept="image/*" id="input-image-target"/>
+                            <input type="hidden" id="image-src-target"/>
+                            <img id="image-preview-target" width="50" height="50"/>
                         </span>
                     </div>
                 </div>

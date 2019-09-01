@@ -97,21 +97,29 @@ function SteeringController()
     this.imageObject_hunter;
     this.imageObject_gatherer;
     this.imageObject_target;
-    
-    if (typeof this.imagesrc_hunter.value !== "undefined" && this.imagesrc_hunter.value != "" && this.imagesrc_hunter.value != null)
+    if (typeof this.imagesrc_hunter !== "undefined" && this.imagesrc_hunter != null)
     {
-        this.imageObject_hunter = new Image();
-        this.imageObject_hunter.src = this.imagesrc_hunter.value;
+        if (typeof this.imagesrc_hunter.value !== "undefined" && this.imagesrc_hunter.value != "" && this.imagesrc_hunter.value != null)
+        {
+            this.imageObject_hunter = new Image();
+            this.imageObject_hunter.src = this.imagesrc_hunter.value;
+        }
     }
-    if (typeof this.imagesrc_gatherer.value !== "undefined" && this.imagesrc_gatherer.value != "" && this.imagesrc_gatherer.value != null)
+    if (typeof this.imagesrc_gatherer !== "undefined" && this.imagesrc_gatherer != null)
     {
-        this.imageObject_gatherer = new Image();
-        this.imageObject_gatherer.src = this.imagesrc_gatherer.value;
+        if (typeof this.imagesrc_gatherer.value !== "undefined" && this.imagesrc_gatherer.value != "" && this.imagesrc_gatherer.value != null)
+        {
+            this.imageObject_gatherer = new Image();
+            this.imageObject_gatherer.src = this.imagesrc_gatherer.value;
+        }
     }
-    if (typeof this.imagesrc_target.value !== "undefined" && this.imagesrc_target.value != "" && this.imagesrc_target.value != null)
+    if (typeof this.imagesrc_target !== "undefined" && this.imagesrc_target != null)
     {
-        this.imageObject_target = new Image();
-        this.imageObject_target.src = this.imagesrc_target.value;
+        if (typeof this.imagesrc_target.value !== "undefined" && this.imagesrc_target.value != "" && this.imagesrc_target.value != null)
+        {
+            this.imageObject_target = new Image();
+            this.imageObject_target.src = this.imagesrc_target.value;
+        }
     }
     
     this.restartsimulation = document.getElementById("restart-simulation-button");
