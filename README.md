@@ -1,4 +1,4 @@
-# Easy-Physics-Editor
+# Easy Physics Editor
 
 Graphical editor for making animations using the [Easy Physics library](https://github.com/EmmaPrats/Easy-Physics).
 
